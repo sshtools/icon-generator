@@ -14,7 +14,7 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 		<artifactId>oss-parent</artifactId>
 		<version>9</version>
 	</parent>
-	
+
 	<licenses>
 		<license>
 			<name>GNU General Public License</name>
@@ -22,7 +22,7 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<scm>
 		<url>https://github.com/sshtools/icon-generator</url>
 		<connection>https://github.com/sshtools/icon-generator.git</connection>
@@ -34,7 +34,7 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 			<email>brett@nervepoint.com</email>
 		</developer>
 	</developers>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>${swt.groupId}</groupId>
@@ -44,6 +44,37 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 	</dependencies>
 
 	<profiles>
+
+
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
 		<profile>
 			<id>mac</id>
 			<activation>
