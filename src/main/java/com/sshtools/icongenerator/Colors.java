@@ -29,6 +29,8 @@ public class Colors {
 	}
 
 	public int color(Object key) {
-		return colors.get(Math.abs(key.hashCode()) % colors.size());
+		final int fct = Math.abs(key.hashCode()) % colors.size();
+		System.out.println("HASH OF " + key + " " + key.hashCode() + " = " + fct + " " + colors.size());
+		return colors.get(fct);
 	}
 }

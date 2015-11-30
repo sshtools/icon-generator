@@ -41,7 +41,7 @@ public class Java2DIconCanvas {
 
 		// Configure the shape
 		switch (builder.shape()) {
-		case ROUNDED_RECTANGLE:
+		case ROUNDED:
 			shape = new RoundRectangle2D.Float();
 			((RoundRectangle2D) shape).setRoundRect(bounds.x, bounds.y,
 					bounds.width, bounds.height, builder.radius(),

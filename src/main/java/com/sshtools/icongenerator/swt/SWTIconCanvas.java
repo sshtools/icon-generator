@@ -101,7 +101,7 @@ public class SWTIconCanvas {
 			canvas.setBackground(paint);
 			// canvas.fill(shape);
 			switch (shape) {
-			case ROUNDED_RECTANGLE:
+			case ROUNDED:
 				canvas.fillRoundRectangle(actualBounds.x, actualBounds.y,
 						actualBounds.width, actualBounds.height, radius, radius);
 				break;
@@ -123,7 +123,7 @@ public class SWTIconCanvas {
 				actualBounds.width -= border;
 				actualBounds.height -= border;
 				switch (shape) {
-				case ROUNDED_RECTANGLE:
+				case ROUNDED:
 					canvas.drawRoundRectangle(actualBounds.x, actualBounds.y,
 							actualBounds.width, actualBounds.height, radius,
 							radius);

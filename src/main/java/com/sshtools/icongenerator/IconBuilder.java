@@ -3,7 +3,7 @@ package com.sshtools.icongenerator;
 public class IconBuilder {
 
 	public enum IconShape {
-		RECTANGLE, ROUND, ROUNDED_RECTANGLE
+		RECTANGLE, ROUND, ROUNDED
 	}
 
 	public enum TextCase {
@@ -140,7 +140,7 @@ public class IconBuilder {
 	}
 
 	public IconBuilder roundRect(int radius) {
-		this.shape = IconShape.ROUNDED_RECTANGLE;
+		this.shape = IconShape.ROUNDED;
 		this.radius = radius;
 		return this;
 	}

@@ -34,6 +34,10 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 			<email>brett@nervepoint.com</email>
 		</developer>
 	</developers>
+	
+	<build>
+		
+	</build>
 
 	<dependencies>
 		<dependency>
