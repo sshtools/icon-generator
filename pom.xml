@@ -36,7 +36,8 @@ Currently a two implementations are available, one for Java2d (AWT) and one for 
 	</developers>
 	
 	<build>
-		
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/samples/java</testSourceDirectory>
 	</build>
 
 	<dependencies>

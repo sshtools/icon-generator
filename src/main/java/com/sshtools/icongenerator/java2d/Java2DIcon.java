@@ -14,9 +14,9 @@ public class Java2DIcon implements Icon {
 	private BufferedImage image;
 
 	public Java2DIcon(IconBuilder builder) {
-		image = new BufferedImage((int)builder.width(), (int)builder.height(), BufferedImage.TYPE_4BYTE_ABGR);
+		image = new BufferedImage((int)builder.width(), (int)builder.height(), BufferedImage.TYPE_INT_ARGB);
 		new Java2DIconCanvas(builder).draw((Graphics2D) image.getGraphics());
-	}
+	} 
 
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		g.drawImage(image, x, y, null);		

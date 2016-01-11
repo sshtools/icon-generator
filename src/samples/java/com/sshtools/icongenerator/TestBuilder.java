@@ -21,10 +21,11 @@ public class TestBuilder extends IconBuilder {
 			break;
 		}
 
-		char ca = (char) ((short) 'a' + (short) (Math.random() * 26));
-		char cb = (char) ((short) 'a' + (short) (Math.random() * 26));
-
-		String text = String.valueOf(ca) + String.valueOf(cb);
+		String text = "";
+		for(int i = 0 ; i < 1 + (int)( Math.random() * 3); i++) {
+			char ca = (char) ((short) 'a' + (short) (Math.random() * 26));
+			text += String.valueOf(ca);
+		}
 
 		if (Math.random() > 0.5)
 			textCase(TextCase.UPPER);

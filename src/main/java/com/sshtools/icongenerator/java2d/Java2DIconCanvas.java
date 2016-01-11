@@ -18,10 +18,11 @@ import java.io.InputStream;
 import java.net.URL;
 
 import com.sshtools.icongenerator.IconBuilder;
+import com.sshtools.icongenerator.IconUtil;
 
 public class Java2DIconCanvas {
-	private static final float SHADE_FACTORY = 0.9f;
-
+	private static final float SHADE_FACTOR = 0.9f;
+	private static float SHRINK_FACTOR = 0.9f;
 	private static Font iconFont;
 
 	private Paint textPaint;
@@ -43,8 +44,7 @@ public class Java2DIconCanvas {
 		switch (builder.shape()) {
 		case ROUNDED:
 			shape = new RoundRectangle2D.Float();
-			((RoundRectangle2D) shape).setRoundRect(bounds.x, bounds.y,
-					bounds.width, bounds.height, builder.radius(),
+			((RoundRectangle2D) shape).setRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, builder.radius(),
 					builder.radius());
 			break;
 		case ROUND:
@@ -62,8 +62,7 @@ public class Java2DIconCanvas {
 		// Border
 		final float border = builder.border();
 		if (border > 0) {
-			Rectangle2D.Float rect = new Rectangle2D.Float(bounds.x, bounds.y,
-					bounds.width, bounds.height);
+			Rectangle2D.Float rect = new Rectangle2D.Float(bounds.x, bounds.y, bounds.width, bounds.height);
 			rect.x += border / 2;
 			rect.y += border / 2;
 			rect.width -= border;
@@ -71,8 +70,7 @@ public class Java2DIconCanvas {
 
 			// Configure the shape and create the border shape
 			if (shape instanceof RoundRectangle2D) {
-				borderShape = new RoundRectangle2D.Float(rect.x, rect.y,
-						rect.width, rect.height, builder.radius(),
+				borderShape = new RoundRectangle2D.Float(rect.x, rect.y, rect.width, rect.height, builder.radius(),
 						builder.radius());
 			} else if (shape instanceof Ellipse2D) {
 				borderShape = new Ellipse2D.Float();
@@ -88,11 +86,12 @@ public class Java2DIconCanvas {
 		fixedFontSize = builder.fontSize();
 
 		// Text
+		float availableTextWidth = Math.min(bounds.width, bounds.height) * SHRINK_FACTOR;
+
 		if (builder.icon() != null) {
 			text = builder.icon().toString();
-			font = getIconFont().deriveFont(
-					builder.bold() ? Font.BOLD : Font.PLAIN,
-					(float) (fixedFontSize == -1 ? 12 : fixedFontSize));
+			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
+					fixedFontSize == -1 ? IconUtil.pixelsToPoints((int) availableTextWidth) : fixedFontSize);
 		} else {
 			text = builder.text();
 			switch (builder.textCase()) {
@@ -106,8 +105,8 @@ public class Java2DIconCanvas {
 				break;
 			}
 
-			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD
-					: Font.PLAIN, fixedFontSize == -1 ? 12 : fixedFontSize);
+			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN, fixedFontSize == -1
+					? IconUtil.pixelsToPoints((int)(availableTextWidth / ( SHRINK_FACTOR * text.length()))): fixedFontSize);
 		}
 		textStroke = new BasicStroke(Math.max(1, border));
 		textPaint = new Color(builder.textColor());
@@ -117,8 +116,7 @@ public class Java2DIconCanvas {
 	public void draw(Graphics2D canvas) {
 		canvas = (Graphics2D) canvas.create();
 		try {
-			canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
+			canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			// The background
 			canvas.setPaint(paint);
@@ -129,13 +127,7 @@ public class Java2DIconCanvas {
 				drawBorder(canvas);
 			}
 
-			// The text
-			Font actualFont = this.fixedFontSize == -1 ? new Font(
-					font.getName(), font.getStyle(), (int) (Math.min(
-							bounds.width, bounds.height) / 2)) : font;
-
-			GlyphVector gv = actualFont.createGlyphVector(
-					canvas.getFontRenderContext(), text);
+			GlyphVector gv = font.createGlyphVector(canvas.getFontRenderContext(), text);
 			Rectangle2D textBounds = gv.getVisualBounds();
 			canvas.setPaint(textPaint);
 			canvas.setStroke(textStroke);
@@ -152,10 +144,8 @@ public class Java2DIconCanvas {
 	private static Font getIconFont() {
 		if (iconFont == null) {
 			try {
-				final URL resource = Java2DIconCanvas.class
-						.getResource("/fontawesome-webfont.ttf");
-				InputStream in = resource == null ? null : resource
-						.openStream();
+				final URL resource = Java2DIconCanvas.class.getResource("/fontawesome-webfont.ttf");
+				InputStream in = resource == null ? null : resource.openStream();
 				if (in == null) {
 					throw new RuntimeException(
 							"Could not find FontAwesome font. Make sure fontaweseome-webfont.ttf is on the CLASSPATH");
@@ -185,8 +175,7 @@ public class Java2DIconCanvas {
 	}
 
 	private static Color getDarker(Color color) {
-		return new Color((int) (SHADE_FACTORY * color.getRed()),
-				(int) (SHADE_FACTORY * color.getGreen()),
-				(int) (SHADE_FACTORY * color.getBlue()));
+		return new Color((int) (SHADE_FACTOR * color.getRed()), (int) (SHADE_FACTOR * color.getGreen()),
+				(int) (SHADE_FACTOR * color.getBlue()));
 	}
 }
