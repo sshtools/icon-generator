@@ -1,14 +1,20 @@
 package com.sshtools.icongenerator;
 
+import java.util.Random;
+
 import com.sshtools.icongenerator.AwesomeIcon;
 import com.sshtools.icongenerator.Colors;
 import com.sshtools.icongenerator.IconBuilder;
 
 public class TestBuilder extends IconBuilder {
+	
+	static Random rnd = new Random(1);
 
 	public TestBuilder() {
+		
+		
 
-		int r = (int) (Math.random() * 3f);
+		int r = (int) (rnd.nextFloat() * 3f);
 		switch (r) {
 		case 0:
 			rect();
@@ -17,28 +23,28 @@ public class TestBuilder extends IconBuilder {
 			round();
 			break;
 		case 2:
-			roundRect((int) (Math.random() * 12f));
+			roundRect((int) (rnd.nextFloat() * 12f));
 			break;
 		}
 
 		String text = "";
-		for(int i = 0 ; i < 1 + (int)( Math.random() * 3); i++) {
-			char ca = (char) ((short) 'a' + (short) (Math.random() * 26));
+		for(int i = 0 ; i < 1 + (int)( rnd.nextFloat() * 3); i++) {
+			char ca = (char) ((short) 'a' + (short) (rnd.nextFloat() * 26));
 			text += String.valueOf(ca);
 		}
 
-		if (Math.random() > 0.5)
+		if (rnd.nextFloat() > 0.5)
 			textCase(TextCase.UPPER);
 
-		if (Math.random() > 0.5)
+		if (rnd.nextFloat() > 0.5)
 			bold();
 
-		border((int) (Math.random() * 5));
+		border((int) (rnd.nextFloat() * 5));
 
-		if (Math.random() > 0.5)
+		if (rnd.nextFloat() > 0.5)
 			text(text);
 		else
-			icon(AwesomeIcon.values()[(int) (Math.random() * AwesomeIcon
+			icon(AwesomeIcon.values()[(int) (rnd.nextFloat() * AwesomeIcon
 					.values().length)]);
 
 		color(Colors.DEFAULT.color(text));

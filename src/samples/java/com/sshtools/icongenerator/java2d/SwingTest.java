@@ -18,7 +18,9 @@ public class SwingTest extends JFrame {
 		super("IconGen");
 		setLayout(new GridLayout(8, 8, 4, 4));
 		for (int i = 0; i < 64; i++) {
-			add(new JLabel(IconGenerator.icon(new TestBuilder(), Icon.class)));
+			TestBuilder builder = new TestBuilder();
+			builder.fontSize(48);
+			add(new JLabel(IconGenerator.icon(builder, Icon.class)));
 		}
 	}
 

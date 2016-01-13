@@ -9,6 +9,7 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
@@ -22,7 +23,17 @@ import com.sshtools.icongenerator.IconUtil;
 
 public class Java2DIconCanvas {
 	private static final float SHADE_FACTOR = 0.9f;
-	private static float SHRINK_FACTOR = 0.9f;
+
+	/*
+	 * How much to scale the 'available' space by to leave a margin around the
+	 * text/icon. For example, to leave a margin that 12.5% of the total width
+	 * (1/8th) around the icon, use a shrink factor of 0.75 (meaning the
+	 * text/icon will be 75% of the total width).
+	 * 
+	 * NOTE: As a special case, the circle shape will apply a further factor of
+	 * 0.75 to this.
+	 */
+	private static float DEFAULT_SHRINK_FACTOR = 0.75f;
 	private static Font iconFont;
 
 	private Paint textPaint;
@@ -36,6 +47,8 @@ public class Java2DIconCanvas {
 	private Stroke textStroke;
 	private int fixedFontSize;
 	private Paint paint;
+	private float border;
+	private float shrinkFactor = DEFAULT_SHRINK_FACTOR;
 
 	public Java2DIconCanvas(IconBuilder builder) {
 		bounds = new Rectangle2D.Float(0, 0, builder.width(), builder.height());
@@ -50,6 +63,7 @@ public class Java2DIconCanvas {
 		case ROUND:
 			shape = new Ellipse2D.Float();
 			shape.setFrame(bounds);
+			shrinkFactor *= 0.85f;
 			break;
 		default:
 			shape = new Rectangle2D.Float();
@@ -60,7 +74,7 @@ public class Java2DIconCanvas {
 		paint = color;
 
 		// Border
-		final float border = builder.border();
+		border = builder.border();
 		if (border > 0) {
 			Rectangle2D.Float rect = new Rectangle2D.Float(bounds.x, bounds.y, bounds.width, bounds.height);
 			rect.x += border / 2;
@@ -86,12 +100,11 @@ public class Java2DIconCanvas {
 		fixedFontSize = builder.fontSize();
 
 		// Text
-		float availableTextWidth = Math.min(bounds.width, bounds.height) * SHRINK_FACTOR;
 
 		if (builder.icon() != null) {
 			text = builder.icon().toString();
 			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
-					fixedFontSize == -1 ? IconUtil.pixelsToPoints((int) availableTextWidth) : fixedFontSize);
+					fixedFontSize == -1 ? (int) bounds.width : fixedFontSize);
 		} else {
 			text = builder.text();
 			switch (builder.textCase()) {
@@ -106,11 +119,12 @@ public class Java2DIconCanvas {
 			}
 
 			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN, fixedFontSize == -1
-					? IconUtil.pixelsToPoints((int)(availableTextWidth / ( SHRINK_FACTOR * text.length()))): fixedFontSize);
+					? IconUtil.pixelsToPoints((int) Math.min(bounds.width, bounds.height)) : fixedFontSize);
 		}
 		textStroke = new BasicStroke(Math.max(1, border));
 		textPaint = new Color(builder.textColor());
 
+		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2));
 	}
 
 	public void draw(Graphics2D canvas) {
@@ -127,13 +141,55 @@ public class Java2DIconCanvas {
 				drawBorder(canvas);
 			}
 
+			// Translate by the border size
+			canvas.translate(bounds.x, bounds.y);
+
+			/* Create the text as glyphs and get their nature bounds */
 			GlyphVector gv = font.createGlyphVector(canvas.getFontRenderContext(), text);
-			Rectangle2D textBounds = gv.getVisualBounds();
+			Rectangle2D textBounds = gv.getPixelBounds(canvas.getFontRenderContext(), 0, 0);
+
+			/*
+			 * Calculate how much to scale by to make the text fit inside the
+			 * bounding box
+			 */
+			float availableWidth = bounds.width * shrinkFactor;
+			float availableHeight = bounds.height * shrinkFactor;
+			float scaleX = 1;
+			float scaleY = 1;
+			if (textBounds.getWidth() > availableWidth) {
+				scaleX = availableWidth / (float) textBounds.getWidth();
+			}
+			if (textBounds.getHeight() > availableHeight) {
+				scaleY = availableHeight / (float) textBounds.getHeight();
+			}
+			float scale = Math.min(scaleX, scaleY);
+
+			/*
+			 * Center within the bounds using the width/height as it will be
+			 * after scaling
+			 */
+			canvas.translate((bounds.width - (textBounds.getWidth() * scale)) / 2f,
+					(bounds.height - (textBounds.getHeight() * scale)) / 2f);
+
 			canvas.setPaint(textPaint);
 			canvas.setStroke(textStroke);
-			canvas.translate((bounds.width - textBounds.getWidth()) / 2f,
-					((bounds.height) / 2f) + (textBounds.getHeight() / 2f));
+
+			/*
+			 * Use an AffineTransform rather the GC.scale to prevent having to
+			 * calculate a scaled translation
+			 */
+			AffineTransform t = AffineTransform.getScaleInstance(scale, scale);
+			AffineTransform saveAT = canvas.getTransform();
+			canvas.transform(t);
+			/*
+			 * The text's origin is not at the bottom left of it's bounding box,
+			 * so translate it so it is. This makes the above calculation
+			 * clearer, if you think of the text as a box when centering /
+			 * scaling it
+			 */
+			canvas.translate(-textBounds.getX(), textBounds.getHeight());
 			canvas.fill(gv.getOutline());
+			canvas.setTransform(saveAT);
 
 		} finally {
 			canvas.dispose();
