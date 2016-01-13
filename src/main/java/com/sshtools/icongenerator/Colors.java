@@ -1,5 +1,6 @@
 package com.sshtools.icongenerator;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -9,9 +10,28 @@ public class Colors {
 	public static Colors DEFAULT = new Colors(Arrays.asList(0xfff16364, 0xfff58559, 0xfff9a43e, 0xffe4c62e, 0xff67bf74,
 			0xff59a2be, 0xff2093cd, 0xffad62a7, 0xff805781));
 
-	public static Colors MATERIAL = new Colors(Arrays.asList(0xffe57373, 0xfff06292, 0xffba68c8, 0xff9575cd, 0xff7986cb,
-			0xff64b5f6, 0xff4fc3f7, 0xff4dd0e1, 0xff4db6ac, 0xff81c784, 0xffaed581, 0xffff8a65, 0xffd4e157, 0xffffd54f,
-			0xffffb74d, 0xffa1887f, 0xff90a4ae));
+	public static Colors MATERIAL = new Colors(Arrays.asList(
+			Color.decode("#FFEB3B").getRGB(),
+			Color.decode("#FFC107").getRGB(),
+			Color.decode("#FF9800").getRGB(),
+			Color.decode("#FF5722").getRGB(),
+			Color.decode("#795548").getRGB(),
+			Color.decode("#9E9E9E").getRGB(),
+			Color.decode("#607D8B").getRGB(),
+			Color.decode("#000000").getRGB(),
+			Color.decode("#F44336").getRGB(),
+			Color.decode("#9C27B0").getRGB(),
+			Color.decode("#E91E63").getRGB(),
+			Color.decode("#673AB7").getRGB(),
+			Color.decode("#3F51B5").getRGB(),
+			Color.decode("#2196F3").getRGB(),
+			Color.decode("#03A9F4").getRGB(),
+			Color.decode("#00BCD4").getRGB(),
+			Color.decode("#009688").getRGB(),
+			Color.decode("#4CAF50").getRGB(),
+			Color.decode("#8BC34A").getRGB(),
+			Color.decode("#CDDC39").getRGB()
+			));
 
 	private final List<Integer> colors;
 	private final Random rnd;
