@@ -111,7 +111,7 @@
 								<!-- include ONLY dependencies I control -->
 								<dependencySourceInclude>com.sshtools:*</dependencySourceInclude>
 							</dependencySourceIncludes>
-							<additionalparam>-Xdoclint:none</additionalparam>
+							<!-- <additionalparam>-Xdoclint:none</additionalparam> -->
 						</configuration>
 					</execution>
 				</executions>
