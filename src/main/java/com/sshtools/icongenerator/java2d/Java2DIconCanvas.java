@@ -100,11 +100,12 @@ public class Java2DIconCanvas {
 		fixedFontSize = builder.fontSize();
 
 		// Text
-
+		double hack = 0;
 		if (builder.icon() != null) {
 			text = builder.icon().toString();
 			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
 					fixedFontSize == -1 ? (int) bounds.width : fixedFontSize);
+//			hack = (bounds.height / 7D);
 		} else {
 			text = builder.text();
 			switch (builder.textCase()) {
@@ -124,7 +125,7 @@ public class Java2DIconCanvas {
 		textStroke = new BasicStroke(Math.max(1, border));
 		textPaint = new Color(builder.textColor());
 
-		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2));
+		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2) - hack);
 	}
 
 	public void draw(Graphics2D canvas) {
