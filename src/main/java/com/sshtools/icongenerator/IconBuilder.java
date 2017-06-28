@@ -2,6 +2,10 @@ package com.sshtools.icongenerator;
 
 public class IconBuilder {
 
+	public static final int AUTO_TEXT_COLOR = -3;
+	public static final int AUTO_TEXT_COLOR_WHITE= -1;
+	public static final int AUTO_TEXT_COLOR_BLACK = -2;
+
 	public enum IconShape {
 		RECTANGLE, ROUND, ROUNDED
 	}
@@ -25,7 +29,7 @@ public class IconBuilder {
 
 	public IconBuilder() {
 		text = "";
-		textColor = 0x00ffffff;
+		textColor = AUTO_TEXT_COLOR;
 		borderThickness = 0;
 		width = 64;
 		height = 64;
@@ -64,6 +68,21 @@ public class IconBuilder {
 
 	public IconBuilder textColor(int color) {
 		this.textColor = color;
+		return this;
+	}
+	
+	public IconBuilder autoTextColor() {
+		this.textColor = AUTO_TEXT_COLOR;
+		return this;
+	}
+	
+	public IconBuilder autoTextColorPreferWhite() {
+		this.textColor = AUTO_TEXT_COLOR_WHITE;
+		return this;
+	}
+	
+	public IconBuilder autoTextColorPreferBlack() {
+		this.textColor = AUTO_TEXT_COLOR_BLACK;
 		return this;
 	}
 

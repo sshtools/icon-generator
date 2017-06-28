@@ -9,6 +9,7 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.font.GlyphVector;
+import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -33,7 +34,7 @@ public class Java2DIconCanvas {
 	 * NOTE: As a special case, the circle shape will apply a further factor of
 	 * 0.75 to this.
 	 */
-	private static float DEFAULT_SHRINK_FACTOR = 0.75f;
+	private static float DEFAULT_SHRINK_FACTOR = 0.8f;
 	private static Font iconFont;
 
 	private Paint textPaint;
@@ -49,6 +50,7 @@ public class Java2DIconCanvas {
 	private Paint paint;
 	private float border;
 	private float shrinkFactor = DEFAULT_SHRINK_FACTOR;
+	private boolean isIcon;
 
 	public Java2DIconCanvas(IconBuilder builder) {
 		bounds = new Rectangle2D.Float(0, 0, builder.width(), builder.height());
@@ -99,13 +101,50 @@ public class Java2DIconCanvas {
 		}
 		fixedFontSize = builder.fontSize();
 
+		textStroke = new BasicStroke(Math.max(1, border));
+		int textColor = builder.textColor();
+		if (textColor < 0) {
+			/*
+			 * Give the text either black or white depending on brightness of
+			 * background
+			 */
+			float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), new float[3]);
+			System.out.print("HSB for " + color + " is " + hsb[0] + "," + hsb[1] + "," + hsb[2]);
+			switch (textColor) {
+			case IconBuilder.AUTO_TEXT_COLOR:
+				if (hsb[2] > 0.9f) {
+					textColor = Color.BLACK.getRGB();
+				} else {
+					textColor = Color.WHITE.getRGB();
+				}
+				break;
+			case IconBuilder.AUTO_TEXT_COLOR_WHITE:
+				if (hsb[1] < 0.1f && hsb[2] > 0.1f) {
+					textColor = Color.BLACK.getRGB();
+				} else {
+					textColor = Color.WHITE.getRGB();
+				}
+				break;
+			case IconBuilder.AUTO_TEXT_COLOR_BLACK:
+				if (hsb[1] > 0.9f || hsb[2] > 0.9f) {
+					textColor = Color.BLACK.getRGB();
+				} else {
+					textColor = Color.WHITE.getRGB();
+				}
+				break;
+			}
+		}
+		textPaint = new Color(textColor);
+
+		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2));
+
 		// Text
-		double hack = 0;
-		if (builder.icon() != null) {
+		isIcon = builder.icon() != null;
+
+		if (isIcon) {
 			text = builder.icon().toString();
 			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
 					fixedFontSize == -1 ? (int) bounds.width : fixedFontSize);
-//			hack = (bounds.height / 7D);
 		} else {
 			text = builder.text();
 			switch (builder.textCase()) {
@@ -122,10 +161,6 @@ public class Java2DIconCanvas {
 			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN, fixedFontSize == -1
 					? IconUtil.pixelsToPoints((int) Math.min(bounds.width, bounds.height)) : fixedFontSize);
 		}
-		textStroke = new BasicStroke(Math.max(1, border));
-		textPaint = new Color(builder.textColor());
-
-		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2) - hack);
 	}
 
 	public void draw(Graphics2D canvas) {
@@ -142,6 +177,9 @@ public class Java2DIconCanvas {
 				drawBorder(canvas);
 			}
 
+			// Get the metrics
+			LineMetrics fm = font.getLineMetrics(text, 0, text.length(), canvas.getFontRenderContext());
+
 			// Translate by the border size
 			canvas.translate(bounds.x, bounds.y);
 
@@ -153,24 +191,36 @@ public class Java2DIconCanvas {
 			 * Calculate how much to scale by to make the text fit inside the
 			 * bounding box
 			 */
-			float availableWidth = bounds.width * shrinkFactor;
-			float availableHeight = bounds.height * shrinkFactor;
+			// float availableWidth = bounds.width * shrinkFactor;
+			// float availableHeight = bounds.height * shrinkFactor;
+			float availableWidth = bounds.width;
+			float availableHeight = bounds.height;
+
 			float scaleX = 1;
 			float scaleY = 1;
 			if (textBounds.getWidth() > availableWidth) {
 				scaleX = availableWidth / (float) textBounds.getWidth();
 			}
-			if (textBounds.getHeight() > availableHeight) {
-				scaleY = availableHeight / (float) textBounds.getHeight();
+			if (fm.getHeight() > availableHeight) {
+				scaleY = availableHeight / (float) fm.getHeight();
 			}
-			float scale = Math.min(scaleX, scaleY);
+
+			scaleX = scaleY = Math.min(scaleY, scaleX);
+
+			scaleX *= shrinkFactor;
+			scaleY *= shrinkFactor;
+
+			System.out.println(String.format(
+					"Scale: %3.2f x %3.2f)\tFont Size:%3d\tFont Height: %3.2f\tText: %-5s\tIs Icon: %3s\tDescent: %3.2f\tAscent: %3.2f\tTB:%-20s\tB:%-20s",
+					scaleX, scaleY, font.getSize(), fm.getHeight(), text, isIcon ? "yes" : "no", fm.getDescent(),
+					fm.getAscent(), textBounds, bounds));
 
 			/*
 			 * Center within the bounds using the width/height as it will be
 			 * after scaling
 			 */
-			canvas.translate((bounds.width - (textBounds.getWidth() * scale)) / 2f,
-					(bounds.height - (textBounds.getHeight() * scale)) / 2f);
+			canvas.translate((bounds.width - (textBounds.getWidth() * scaleX)) / 2f,
+					((availableHeight + ((fm.getAscent() - fm.getDescent()) * scaleY))) / 2f);
 
 			canvas.setPaint(textPaint);
 			canvas.setStroke(textStroke);
@@ -179,16 +229,11 @@ public class Java2DIconCanvas {
 			 * Use an AffineTransform rather the GC.scale to prevent having to
 			 * calculate a scaled translation
 			 */
-			AffineTransform t = AffineTransform.getScaleInstance(scale, scale);
+			AffineTransform t = AffineTransform.getScaleInstance(scaleX, scaleY);
 			AffineTransform saveAT = canvas.getTransform();
 			canvas.transform(t);
-			/*
-			 * The text's origin is not at the bottom left of it's bounding box,
-			 * so translate it so it is. This makes the above calculation
-			 * clearer, if you think of the text as a box when centering /
-			 * scaling it
-			 */
-			canvas.translate(-textBounds.getX(), textBounds.getHeight());
+
+			canvas.translate(-textBounds.getX(), 0);
 			canvas.fill(gv.getOutline());
 			canvas.setTransform(saveAT);
 
