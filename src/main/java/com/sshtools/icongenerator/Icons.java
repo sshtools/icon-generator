@@ -6,12 +6,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Random;
 
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.sshtools.icongenerator.IconBuilder.IconShape;
-import com.sshtools.icongenerator.java2d.Java2DIcon;
 
 /**
  * Very simple icon test. Just shows a grid of random icons. Remove the zero
@@ -23,7 +23,7 @@ public class Icons extends JPanel {
 	private Random r = new Random(0);
 
 	Icons() {
-		setLayout(new GridLayout(10, 10));
+		setLayout(new GridLayout(10, 10, 2, 2));
 		for (int i = 0; i < 100; i++) {
 			IconBuilder ib = new IconBuilder();
 			if (r.nextFloat() > 0.5)
@@ -31,8 +31,8 @@ public class Icons extends JPanel {
 			if (r.nextFloat() > 0.5)
 				ib.border((int) (r.nextFloat() * 4f));
 			ib.shape(IconShape.values()[(int) (IconShape.values().length * r.nextFloat())]);
-			ib.width(96);
-			ib.height(96);
+			ib.width(48);
+			ib.height(48);
 			if (r.nextFloat() > 0.5) {
 				ib.icon(AwesomeIcon.values()[(int) (AwesomeIcon.values().length * r.nextFloat())]);
 				if (r.nextFloat() > 0.5)
@@ -41,7 +41,7 @@ public class Icons extends JPanel {
 				ib.text(randWord());
 			ib.fontName("Sans");
 			ib.color(Colors.MATERIAL.color(ib.text()));
-			add(new JLabel(new Java2DIcon(ib)));
+			add(new JLabel(ib.build(Icon.class)));
 		}
 	}
 

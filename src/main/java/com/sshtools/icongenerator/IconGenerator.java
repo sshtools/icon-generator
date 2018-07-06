@@ -1,14 +1,13 @@
 package com.sshtools.icongenerator;
 
-import com.sshtools.icongenerator.java2d.Java2DIcon;
-
-public class IconGenerator {
-
-	@SuppressWarnings("unchecked")
-	public static <T> T icon(IconBuilder builder, Class<T> iconClass) {
-		if(iconClass.getName().equals("javax.swing.Icon")) {
-			return (T) new Java2DIcon(builder);
-		}
-		throw new UnsupportedOperationException("Icon's of class " + iconClass + " are not supported.");
-	}
+/**
+ * Implement by classes that can generate a particular type of icon from an
+ * {@link IconBuilder}.
+ *
+ * @param <T>
+ *            type of icon
+ * @see IconBuilder#generator(Class, IconGenerator)
+ */
+public interface IconGenerator<T> {
+	T generate(IconBuilder builder);
 }

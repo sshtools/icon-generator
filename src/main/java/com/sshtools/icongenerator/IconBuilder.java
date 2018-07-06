@@ -1,17 +1,59 @@
 package com.sshtools.icongenerator;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.Icon;
+
+import com.sshtools.icongenerator.java2d.Java2DIcon;
+import com.sshtools.icongenerator.java2d.Java2DIconCanvas;
+
+/**
+ * Build all the characteristics of a generated icon. This then needs to be
+ * passed to one of the toolkit specific generators such as
+ * {@link Java2DIconCanvas}.
+ * <p>
+ * To get the final icon, you can either use 
+ */
 public class IconBuilder {
 
 	public static final int AUTO_TEXT_COLOR = -3;
-	public static final int AUTO_TEXT_COLOR_WHITE= -1;
+	public static final int AUTO_TEXT_COLOR_WHITE = -1;
 	public static final int AUTO_TEXT_COLOR_BLACK = -2;
 
+	/**
+	 * Icon shape
+	 *
+	 */
 	public enum IconShape {
-		RECTANGLE, ROUND, ROUNDED
+		/**
+		 * Rectangle
+		 */
+		RECTANGLE,
+		/**
+		 * Circle
+		 */
+		ROUND,
+		/**
+		 * Rounded rectangle
+		 */
+		ROUNDED
 	}
 
+	/**
+	 * How (or if) to convert the case of any text content
+	 */
 	public enum TextCase {
-		UPPER, LOWER, ORIGINAL
+		/**
+		 * Convert to upper case
+		 */
+		UPPER,
+		/**
+		 * Convert to lower case
+		 */
+		LOWER, ORIGINAL
 	}
 
 	private IconShape shape = IconShape.RECTANGLE;
@@ -26,7 +68,11 @@ public class IconBuilder {
 	private float radius;
 	private int color;
 	private AwesomeIcon icon;
+	private Map<Class<?>, IconGenerator<?>> generators = new HashMap<Class<?>, IconGenerator<?>>();	
 
+	/**
+	 * Constructor.
+	 */
 	public IconBuilder() {
 		text = "";
 		textColor = AUTO_TEXT_COLOR;
@@ -37,146 +83,368 @@ public class IconBuilder {
 		fixedFontSize = -1;
 		isBold = false;
 		textCase = TextCase.ORIGINAL;
+		
+		/* Default generators */
+		generator(Icon.class, new IconGenerator<Icon>() {
+			public Icon generate(IconBuilder builder) {
+				return new Java2DIcon(builder);
+			}
+		});
+		generator(BufferedImage.class, new IconGenerator<BufferedImage>() {
+			public BufferedImage generate(IconBuilder builder) {
+				BufferedImage bim = new BufferedImage((int)width,(int)height, BufferedImage.TYPE_INT_ARGB);
+				Java2DIconCanvas c = new Java2DIconCanvas(builder);
+				c.draw((Graphics2D)bim.getGraphics());
+				return bim;
+			}
+		});
 	}
 	
+	/**
+	 * Add a new custom generator. Remove one by setting generate argument to null.
+	 * 
+	 * @param clazz class of generate icon
+	 * @param generate callable that can generate such an object given this icon builder
+	 */
+	public <T extends Object> void generator(Class<T> clazz, IconGenerator<T> generate) {
+		if(generate == null)
+			generators.remove(clazz);
+		else
+			generators.put(clazz, generate);
+	}
+	
+	/**
+	 * Build the icon given it's native type. If the type is recognised, that type will
+	 * be returned.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T build(Class<T> iconClass) {
+		IconGenerator<T> gen = (IconGenerator<T>) generators.get(iconClass);
+		if(gen == null)
+			throw new UnsupportedOperationException("Icon's of class " + iconClass + " are not supported.");
+		else
+			return gen.generate(this);
+	}
+	
+	/**
+	 * Get the icon to display on the background.
+	 * 
+	 * @return icon
+	 */
 	public AwesomeIcon icon() {
 		return icon;
 	}
-	
+
+	/**
+	 * Set the icon to display on the background.
+	 * 
+	 * @param icon
+	 * @return this instance for chaining
+	 */
 	public IconBuilder icon(AwesomeIcon icon) {
 		this.icon = icon;
 		return this;
 	}
 
+	/**
+	 * Get the width.
+	 * 
+	 * @return width
+	 */
 	public float width() {
 		return width;
 	}
 
+	/**
+	 * Set the width
+	 * 
+	 * @param width
+	 *            with
+	 * @return this instance for chaining
+	 */
 	public IconBuilder width(float width) {
 		this.width = width;
 		return this;
 	}
 
+	/**
+	 * Set the height
+	 * 
+	 * @param height
+	 * @return this instance for chaining
+	 */
 	public IconBuilder height(float height) {
 		this.height = height;
 		return this;
 	}
 
+	/**
+	 * Get the height.
+	 * 
+	 * @return height
+	 */
 	public float height() {
 		return height;
 	}
 
+	/**
+	 * Set the text color
+	 * 
+	 * @param color
+	 *            text color
+	 * @return this instance for chaining
+	 */
 	public IconBuilder textColor(int color) {
 		this.textColor = color;
 		return this;
 	}
-	
+
+	/**
+	 * Automatically choose the text color based on the luminosity of the background
+	 * 
+	 * @return this instance for chaining
+	 */
 	public IconBuilder autoTextColor() {
 		this.textColor = AUTO_TEXT_COLOR;
 		return this;
 	}
-	
+
+	/**
+	 * Automatically choose the text color based on the luminosity of the background
+	 * with a leaning towards white.
+	 * 
+	 * @return this instance for chaining
+	 */
 	public IconBuilder autoTextColorPreferWhite() {
 		this.textColor = AUTO_TEXT_COLOR_WHITE;
 		return this;
 	}
-	
+
+	/**
+	 * Automatically choose the text color based on the luminosity of the background
+	 * with a leaning towards black.
+	 * 
+	 * @return this instance for chaining
+	 */
 	public IconBuilder autoTextColorPreferBlack() {
 		this.textColor = AUTO_TEXT_COLOR_BLACK;
 		return this;
 	}
 
+	/**
+	 * Get the text color
+	 * 
+	 * @return text color
+	 */
 	public int textColor() {
 		return textColor;
 	}
 
+	/**
+	 * Set the border thickness
+	 * 
+	 * @param thickness
+	 *            border thickness
+	 * @return this instance for chaining
+	 */
 	public IconBuilder border(float thickness) {
 		this.borderThickness = thickness;
 		return this;
 	}
 
+	/**
+	 * Get the border width.
+	 * 
+	 * @return border width
+	 */
 	public float border() {
 		return borderThickness;
 	}
 
+	/**
+	 * Set the font name used for text.
+	 * 
+	 * @param font
+	 *            font name
+	 * @return this instance for chaining
+	 */
 	public IconBuilder fontName(String font) {
 		this.fontName = font;
 		return this;
 	}
 
+	/**
+	 * Get the font name used for text.
+	 * 
+	 * @return font name
+	 */
 	public String fontName() {
 		return fontName;
 	}
 
+	/**
+	 * Set the font size used for text.
+	 * 
+	 * @param size
+	 *            font size
+	 * @return this instance for chaining
+	 */
 	public IconBuilder fontSize(int size) {
 		this.fixedFontSize = size;
 		return this;
 	}
 
+	/**
+	 * Get the font size used for text.
+	 * 
+	 * @return font size
+	 */
 	public int fontSize() {
 		return fixedFontSize;
 	}
 
+	/**
+	 * Set whether to make the font bold.
+	 * 
+	 * @param bold
+	 *            bold
+	 * @return this instance for chaining
+	 */
 	public IconBuilder bold(boolean bold) {
 		this.isBold = bold;
 		return this;
 	}
 
+	/**
+	 * Get whether to make the font bold
+	 * 
+	 * @return bold
+	 */
 	public boolean bold() {
 		return isBold;
 	}
 
+	/**
+	 * Get the radius for rounded corners.
+	 * 
+	 * @return radius
+	 */
 	public float radius() {
 		return radius;
 	}
 
+	/**
+	 * Set how (or if) to convert the case of any text content.
+	 * 
+	 * @param textCase
+	 *            text case
+	 * @return this instance for chaining
+	 */
 	public IconBuilder textCase(TextCase textCase) {
 		this.textCase = textCase;
 		return this;
 	}
 
+	/**
+	 * Get how (or if) to convert the case of any text content.
+	 * 
+	 * @return text case
+	 */
 	public TextCase textCase() {
 		return textCase;
 	}
 
+	/**
+	 * Set the shape of the background.
+	 * 
+	 * @param shape
+	 *            shape
+	 * @return this instance for chaining
+	 */
 	public IconBuilder shape(IconShape shape) {
 		this.shape = shape;
 		return this;
 	}
 
+	/**
+	 * Get the shape of the background
+	 * 
+	 * @return shape
+	 */
 	public IconShape shape() {
 		return shape;
 	}
 
+	/**
+	 * Set the background shape to a rectangle.
+	 * 
+	 * @return this instance for chaining
+	 */
 	public IconBuilder rect() {
 		this.shape = IconShape.RECTANGLE;
 		return this;
 	}
 
+	/**
+	 * Set the background shape to a circle.
+	 * 
+	 * @return this instance for chaining
+	 */
 	public IconBuilder round() {
 		this.shape = IconShape.ROUND;
 		return this;
 	}
 
+	/**
+	 * Set the background shape to a rounded rectangle.
+	 *
+	 * @param radius
+	 *            radius of rounded corners
+	 * @return this instance for chaining
+	 */
 	public IconBuilder roundRect(int radius) {
 		this.shape = IconShape.ROUNDED;
 		this.radius = radius;
 		return this;
 	}
 
+	/**
+	 * Set the text to display on the background
+	 * 
+	 * @param text
+	 *            text
+	 * @return this instance for chaining
+	 */
 	public IconBuilder text(String text) {
 		this.text = text;
 		return this;
 	}
 
+	/**
+	 * Get the text to display on the background
+	 * 
+	 * @return text
+	 */
 	public String text() {
 		return text;
 	}
 
+	/**
+	 * Get the color of the background
+	 * 
+	 * @return background color
+	 */
 	public int color() {
 		return color;
 	}
 
+	/**
+	 * Set the color of the background
+	 * 
+	 * @param color
+	 *            color
+	 * @return this instance for chaining
+	 */
 	public IconBuilder color(int color) {
 		this.color = color;
 		return this;

@@ -22,17 +22,20 @@ import java.net.URL;
 import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconUtil;
 
+/**
+ * Helper for drawing onto {@link Graphics2D} given an {@link IconBuilder}.
+ */
 public class Java2DIconCanvas {
 	private static final float SHADE_FACTOR = 0.9f;
 
 	/*
 	 * How much to scale the 'available' space by to leave a margin around the
 	 * text/icon. For example, to leave a margin that 12.5% of the total width
-	 * (1/8th) around the icon, use a shrink factor of 0.75 (meaning the
-	 * text/icon will be 75% of the total width).
+	 * (1/8th) around the icon, use a shrink factor of 0.75 (meaning the text/icon
+	 * will be 75% of the total width).
 	 * 
-	 * NOTE: As a special case, the circle shape will apply a further factor of
-	 * 0.75 to this.
+	 * NOTE: As a special case, the circle shape will apply a further factor of 0.75
+	 * to this.
 	 */
 	private static float DEFAULT_SHRINK_FACTOR = 0.8f;
 	private static Font iconFont;
@@ -52,6 +55,10 @@ public class Java2DIconCanvas {
 	private float shrinkFactor = DEFAULT_SHRINK_FACTOR;
 	private boolean isIcon;
 
+	/**
+	 * Constructor 
+	 * @param builder
+	 */
 	public Java2DIconCanvas(IconBuilder builder) {
 		bounds = new Rectangle2D.Float(0, 0, builder.width(), builder.height());
 
@@ -105,8 +112,7 @@ public class Java2DIconCanvas {
 		int textColor = builder.textColor();
 		if (textColor < 0) {
 			/*
-			 * Give the text either black or white depending on brightness of
-			 * background
+			 * Give the text either black or white depending on brightness of background
 			 */
 			float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), new float[3]);
 			switch (textColor) {
@@ -157,11 +163,17 @@ public class Java2DIconCanvas {
 				break;
 			}
 
-			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN, fixedFontSize == -1
-					? IconUtil.pixelsToPoints((int) Math.min(bounds.width, bounds.height)) : fixedFontSize);
+			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN,
+					fixedFontSize == -1 ? IconUtil.pixelsToPoints((int) Math.min(bounds.width, bounds.height))
+							: fixedFontSize);
 		}
 	}
 
+	/**
+	 * Draw the icon.
+	 * 
+	 * @param canvas graphics object to draw on
+	 */
 	public void draw(Graphics2D canvas) {
 		canvas = (Graphics2D) canvas.create();
 		try {
@@ -187,8 +199,7 @@ public class Java2DIconCanvas {
 			Rectangle2D textBounds = gv.getPixelBounds(canvas.getFontRenderContext(), 0, 0);
 
 			/*
-			 * Calculate how much to scale by to make the text fit inside the
-			 * bounding box
+			 * Calculate how much to scale by to make the text fit inside the bounding box
 			 */
 			// float availableWidth = bounds.width * shrinkFactor;
 			// float availableHeight = bounds.height * shrinkFactor;
@@ -210,8 +221,7 @@ public class Java2DIconCanvas {
 			scaleY *= shrinkFactor;
 
 			/*
-			 * Center within the bounds using the width/height as it will be
-			 * after scaling
+			 * Center within the bounds using the width/height as it will be after scaling
 			 */
 			canvas.translate((bounds.width - (textBounds.getWidth() * scaleX)) / 2f,
 					((availableHeight + ((fm.getAscent() - fm.getDescent()) * scaleY))) / 2f);
@@ -220,8 +230,8 @@ public class Java2DIconCanvas {
 			canvas.setStroke(textStroke);
 
 			/*
-			 * Use an AffineTransform rather the GC.scale to prevent having to
-			 * calculate a scaled translation
+			 * Use an AffineTransform rather the GC.scale to prevent having to calculate a
+			 * scaled translation
 			 */
 			AffineTransform t = AffineTransform.getScaleInstance(scaleX, scaleY);
 			AffineTransform saveAT = canvas.getTransform();
