@@ -109,7 +109,6 @@ public class Java2DIconCanvas {
 			 * background
 			 */
 			float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), new float[3]);
-			System.out.print("HSB for " + color + " is " + hsb[0] + "," + hsb[1] + "," + hsb[2]);
 			switch (textColor) {
 			case IconBuilder.AUTO_TEXT_COLOR:
 				if (hsb[2] > 0.9f) {
@@ -209,11 +208,6 @@ public class Java2DIconCanvas {
 
 			scaleX *= shrinkFactor;
 			scaleY *= shrinkFactor;
-
-			System.out.println(String.format(
-					"Scale: %3.2f x %3.2f)\tFont Size:%3d\tFont Height: %3.2f\tText: %-5s\tIs Icon: %3s\tDescent: %3.2f\tAscent: %3.2f\tTB:%-20s\tB:%-20s",
-					scaleX, scaleY, font.getSize(), fm.getHeight(), text, isIcon ? "yes" : "no", fm.getDescent(),
-					fm.getAscent(), textBounds, bounds));
 
 			/*
 			 * Center within the bounds using the width/height as it will be
