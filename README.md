@@ -1,5 +1,5 @@
 # icon-generator
-A simple library for generating Java2D (Swing/AWT) and JavaFX icons in Java, with SWT support in an add-on. 
+A simple library for generating Java2D (Swing/AWT) and JavaFX icons in Java, with [SWT](https://github.com/sshtools/icon-generator-swt) support in an add-on. 
 
 ![](src/web/images/sample.png)
 
@@ -114,10 +114,9 @@ Something like this :-
 
 ```java
 response.setContentType("image/jpeg");
-BufferedImage bi = builder.build(BufferedImage.class);
-OutputStream out = response.getOutputStream();
-ImageIO.write(bi, "jpg", out);
-out.close();
+try(OutputStream out = response.getOutputStream()) {
+	ImageIO.write(builder.build(BufferedImage.class), "jpg", out);
+}
 
 ```
 
