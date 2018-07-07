@@ -9,5 +9,8 @@ package com.sshtools.icongenerator;
  * @see IconBuilder#generator(Class, IconGenerator)
  */
 public interface IconGenerator<T> {
-	T generate(IconBuilder builder);
+	
+	Class<T> getIconClass();
+
+	T generate(IconBuilder iconBuilder, Object... args);
 }

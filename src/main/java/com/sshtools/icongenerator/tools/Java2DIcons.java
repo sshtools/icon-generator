@@ -1,4 +1,4 @@
-package com.sshtools.icongenerator;
+package com.sshtools.icongenerator.tools;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -11,18 +11,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.sshtools.icongenerator.AwesomeIcon;
+import com.sshtools.icongenerator.Colors;
+import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconBuilder.IconShape;
 
 /**
  * Very simple icon test. Just shows a grid of random icons. Remove the zero
- * seed from {@link Icons#r} if you want truly random every time.
+ * seed from {@link Java2DIcons#r} if you want truly random every time.
  */
 @SuppressWarnings("serial")
-public class Icons extends JPanel {
+public class Java2DIcons extends JPanel {
 
 	private Random r = new Random(0);
 
-	Icons() {
+	Java2DIcons() {
 		setLayout(new GridLayout(10, 10, 2, 2));
 		for (int i = 0; i < 100; i++) {
 			IconBuilder ib = new IconBuilder();
@@ -59,7 +62,7 @@ public class Icons extends JPanel {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.getContentPane().setLayout(new BorderLayout());
-		Icons icons = new Icons();
+		Java2DIcons icons = new Java2DIcons();
 		f.getContentPane().add(icons);
 		f.pack();
 		f.setVisible(true);

@@ -1,13 +1,9 @@
 package com.sshtools.icongenerator;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
-import javax.swing.Icon;
-
-import com.sshtools.icongenerator.java2d.Java2DIcon;
 import com.sshtools.icongenerator.java2d.Java2DIconCanvas;
 
 /**
@@ -15,7 +11,7 @@ import com.sshtools.icongenerator.java2d.Java2DIconCanvas;
  * passed to one of the toolkit specific generators such as
  * {@link Java2DIconCanvas}.
  * <p>
- * To get the final icon, you can either use 
+ * To get the final icon, you can either use
  */
 public class IconBuilder {
 
@@ -68,7 +64,7 @@ public class IconBuilder {
 	private float radius;
 	private int color;
 	private AwesomeIcon icon;
-	private Map<Class<?>, IconGenerator<?>> generators = new HashMap<Class<?>, IconGenerator<?>>();	
+	private Map<Class<?>, IconGenerator<?>> generators = new HashMap<Class<?>, IconGenerator<?>>();
 
 	/**
 	 * Constructor.
@@ -83,49 +79,48 @@ public class IconBuilder {
 		fixedFontSize = -1;
 		isBold = false;
 		textCase = TextCase.ORIGINAL;
-		
+
 		/* Default generators */
-		generator(Icon.class, new IconGenerator<Icon>() {
-			public Icon generate(IconBuilder builder) {
-				return new Java2DIcon(builder);
-			}
-		});
-		generator(BufferedImage.class, new IconGenerator<BufferedImage>() {
-			public BufferedImage generate(IconBuilder builder) {
-				BufferedImage bim = new BufferedImage((int)width,(int)height, BufferedImage.TYPE_INT_ARGB);
-				Java2DIconCanvas c = new Java2DIconCanvas(builder);
-				c.draw((Graphics2D)bim.getGraphics());
-				return bim;
-			}
-		});
+		for (IconGenerator<?> io : ServiceLoader.load(IconGenerator.class)) {
+			generators.put(io.getIconClass(), io);
+		}
+
 	}
-	
+
 	/**
 	 * Add a new custom generator. Remove one by setting generate argument to null.
+	 * New generators can be automatically added if you add a service definition for
+	 * them. In your add-on module, create a file in
+	 * META-INF/services/com.sshtools.icongenerator.IconGenerator and place the full
+	 * class name of a class that implements {@link IconGenerator}.
 	 * 
-	 * @param clazz class of generate icon
-	 * @param generate callable that can generate such an object given this icon builder
+	 * @param clazz
+	 *            class of generate icon
+	 * @param generate
+	 *            callable that can generate such an object given this icon builder
+	 * @param <T>
+	 *            type of generated object
 	 */
 	public <T extends Object> void generator(Class<T> clazz, IconGenerator<T> generate) {
-		if(generate == null)
+		if (generate == null)
 			generators.remove(clazz);
 		else
 			generators.put(clazz, generate);
 	}
-	
+
 	/**
-	 * Build the icon given it's native type. If the type is recognised, that type will
-	 * be returned.
+	 * Build the icon given it's native type. If the type is recognised, that type
+	 * will be returned.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T build(Class<T> iconClass) {
+	public <T> T build(Class<T> iconClass, Object... args) {
 		IconGenerator<T> gen = (IconGenerator<T>) generators.get(iconClass);
-		if(gen == null)
+		if (gen == null)
 			throw new UnsupportedOperationException("Icon's of class " + iconClass + " are not supported.");
 		else
-			return gen.generate(this);
+			return gen.generate(this, args);
 	}
-	
+
 	/**
 	 * Get the icon to display on the background.
 	 * 
