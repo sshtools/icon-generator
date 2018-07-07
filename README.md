@@ -8,7 +8,7 @@ and styles.
 
 ## Configuring your project
 
-The library is available in Maven Central (TODO!), so configure your project according to the
+The library is available in Maven Central, so configure your project according to the
 build system you use. For example, for Maven itself :-
 
 ```xml
