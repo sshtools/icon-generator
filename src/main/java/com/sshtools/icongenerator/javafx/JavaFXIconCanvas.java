@@ -46,7 +46,10 @@ public class JavaFXIconCanvas {
 		if (builder.icon() != null) {
 			text = builder.icon().toString();
 			font = getIconFont();
-
+			if (bold)
+				font = Font.font(font.getFamily(), FontWeight.BOLD, fontSize);
+			else
+				font = Font.font(font.getFamily(), FontWeight.NORMAL, fontSize);
 		} else {
 			text = builder.text();
 			switch (builder.textCase()) {
@@ -119,12 +122,10 @@ public class JavaFXIconCanvas {
 		}
 
 		canvas.setFont(font);
-		canvas.setStroke(textPaint);
+		canvas.setFill(textPaint);
 		Bounds b = reportSize(text, font);
 
-		double tx = (bounds.getWidth() - b.getWidth()) / 2;
-		double ty = (bounds.getHeight() - b.getHeight()) / 2;
-		canvas.fillText(text, tx, ty);
+		canvas.fillText(text, (bounds.getWidth() - b.getWidth()) / 2d, (bounds.getHeight() + b.getHeight()) / 2d);
 
 	}
 
@@ -141,7 +142,10 @@ public class JavaFXIconCanvas {
 	}
 
 	private static Color getColor(int rgb) {
-		return Color.valueOf(String.format("%08x", rgb));
+		int red = (rgb >> 16) & 0x000000FF;
+		int green = (rgb >>8 ) & 0x000000FF;
+		int blue = (rgb) & 0x000000FF;
+		return new Color((double)red / 255d, (double)green / 255d, (double)blue / 255d , 1d);
 	}
 
 	private static Font getIconFont() {
