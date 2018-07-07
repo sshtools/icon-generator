@@ -122,7 +122,7 @@ try(OutputStream out = response.getOutputStream()) {
 
 ## Extending
 
-New generators may be added by implementing [IconBuilder](src/main/java/com/sshtools/icongenerator/IconGenerator.java).
+New generators may be added by implementing [IconGenerator](src/main/java/com/sshtools/icongenerator/IconGenerator.java).
 You can then either add the generator to each IconBuilder you create :-
 
 ```java
