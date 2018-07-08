@@ -30,7 +30,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sshtools</groupId>
 	<artifactId>icon-generator</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>A simple icon generator</name>
 	<description>This simple icon generator is intended to be an icon
 	 generation library for multiple toolkits. Currently a two implementations are available, 

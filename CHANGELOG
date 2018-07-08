@@ -1,3 +1,8 @@
+1.0.2
+-----
+
+* Generators now have an isValid() method to determine if they can be loaded.
+
 1.0.1
 -----
 

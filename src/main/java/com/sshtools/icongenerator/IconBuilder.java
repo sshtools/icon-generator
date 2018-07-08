@@ -81,13 +81,9 @@ public class IconBuilder {
 		textCase = TextCase.ORIGINAL;
 
 		/* Default generators */
-		for (IconGenerator<?> io : ServiceLoader.load(IconGenerator.class)) {
-			try {
-				generators.put(io.getIconClass(), io);
-			}
-			catch(Exception cnfe) {
-				/* If JavaFX is not available, an exception will be thrown here */
-			}
+		for (IconGenerator<?> gen : ServiceLoader.load(IconGenerator.class)) {
+			if (gen.isValid())
+				generators.put(gen.getIconClass(), gen);
 		}
 
 	}

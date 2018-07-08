@@ -17,4 +17,10 @@ public class Java2DIconGenerator implements IconGenerator<Icon> {
 		return new Java2DIcon(builder);
 	}
 
+	@Override
+	public boolean isValid() {
+		/* TODO maybe need to implement this for modular Java when AWT can be missinig ?*/
+		return true;
+	}
+
 }

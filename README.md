@@ -131,6 +131,13 @@ builder.generator(MyIcon.class, new IconGenerator<MyIcon>() {
 	public Class<MyIcon> getIconClass() {
 		return MyIcon.class;
 	}
+	
+	@Override
+	public boolean isValid() {
+	/* This can be used to have the generator ignored if some pre-condition is not met,
+	   such as a supporting library not being available */
+		return true;
+	}
 
 	@Override
 	public MyIcon generate(IconBuilder builder, Object... args) {

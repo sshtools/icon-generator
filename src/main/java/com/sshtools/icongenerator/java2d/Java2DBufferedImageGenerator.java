@@ -24,4 +24,10 @@ public class Java2DBufferedImageGenerator implements IconGenerator<BufferedImage
 		return bim;
 	}
 
+	@Override
+	public boolean isValid() {
+		/* TODO maybe need to implement this for modular Java when AWT can be missinig ?*/
+		return true;
+	}
+
 }

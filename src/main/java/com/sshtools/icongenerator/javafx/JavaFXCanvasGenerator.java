@@ -1,5 +1,8 @@
 package com.sshtools.icongenerator.javafx;
 
+import java.security.SecureClassLoader;
+import java.util.ServiceLoader;
+
 import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconGenerator;
 
@@ -21,6 +24,16 @@ public class JavaFXCanvasGenerator implements IconGenerator<Canvas> {
 		Canvas canvas = new Canvas(builder.width(), builder.height());
 		iconCanvas.draw(canvas.getGraphicsContext2D());
 		return canvas;
+	}
+
+	@Override
+	public boolean isValid() {
+		try {
+			getClass().getClassLoader().loadClass("javafx.scene.canvas.Canvas");
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

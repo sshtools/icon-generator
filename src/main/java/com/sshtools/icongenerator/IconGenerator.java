@@ -10,6 +10,8 @@ package com.sshtools.icongenerator;
  */
 public interface IconGenerator<T> {
 	
+	boolean isValid();
+	
 	Class<T> getIconClass();
 
 	T generate(IconBuilder iconBuilder, Object... args);
