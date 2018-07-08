@@ -1,0 +1,9 @@
+1.0.1
+-----
+
+* IconBuilder throws exception on construction when using a Java8 JVM that does not have JavaFX available
+
+1.0.0
+-----
+
+* Initial release

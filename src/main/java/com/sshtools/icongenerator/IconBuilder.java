@@ -82,7 +82,12 @@ public class IconBuilder {
 
 		/* Default generators */
 		for (IconGenerator<?> io : ServiceLoader.load(IconGenerator.class)) {
-			generators.put(io.getIconClass(), io);
+			try {
+				generators.put(io.getIconClass(), io);
+			}
+			catch(Exception cnfe) {
+				/* If JavaFX is not available, an exception will be thrown here */
+			}
 		}
 
 	}
