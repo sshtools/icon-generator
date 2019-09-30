@@ -1,45 +1,24 @@
 # icon-generator
-A simple library for generating Java2D (Swing/AWT), JavaFX and [SWT](https://github.com/sshtools/icon-generator-swt) icons in Java. 
+A simple library for generating Java2D (Swing/AWT) and JavaFX icons in Java, with [SWT](https://github.com/sshtools/icon-generator-swt) support in an add-on. 
 
 ![](src/web/images/sample.png)
 
 icon-generator generates icons images automatically from text or icons with customisable shapes, colour
-and styles. 
+and styles.
 
 ## Configuring your project
 
 The library is available in Maven Central, so configure your project according to the
-build system you use. Choose the appropriate module for the toolkit you wish to use.
-You may include multiple toolkits if you wish :-
-
-### Swing
+build system you use. For example, for Maven itself :-
 
 ```xml
+<dependencies>
 	<dependency>
 		<groupId>com.sshtools</groupId>
-		<artifactId>icon-generator-swing</artifactId>
-		<version>1.0.3</version>
+		<artifactId>icon-generator</artifactId>
+		<version>1.0.1</version>
 	</dependency>
-```
-
-### JavaFX
-
-```xml
-	<dependency>
-		<groupId>com.sshtools</groupId>
-		<artifactId>icon-generator-javafx</artifactId>
-		<version>1.0.3</version>
-	</dependency>
-```
-
-### SWT
-
-```xml
-	<dependency>
-		<groupId>com.sshtools</groupId>
-		<artifactId>icon-generator-swt</artifactId>
-		<version>1.0.3</version>
-	</dependency>
+</dependencies>
 ```
 
 ## Configuring the Icon
@@ -80,6 +59,10 @@ build.textColor(IconBuilder.AUTO_TEXT_COLOR_BLACK);
 // and the background colour
 
 builder.color(0x00ff00); // green
+
+// or
+
+builder.color(Colors.MATERIAL.color(builder.text())); // based on text using MATERIAL theme
 ```
 
 
@@ -114,19 +97,34 @@ builder.bold(true);
 builder.icon(AwesomeIcon.ADDRESS_BOOK);
 ```
 
+## Themes
+
+Most useful for setting the background colour, icon-generator has 2 colour themes available
+to give you a consistent palette. 
+
+```java
+builder.color(Colors.MATERIAL.color(builder.text()));
+
+// or
+
+ builder.color(Colors.DEFAULT.color(builder.text()));
+ 
+// or
+
+ builder.color(Colors.MATERIAL.randomColor());
+ 
+// or
+
+ builder.color(Colors.DEFAULT.randomColor());
+```
+
 ## Generate The Icon
 
-Now you can use the IconBuilder.build() for the toolkit you are using. You must
-provide the class of the concrete icon to create, depending on the toolkit. The 
-following are supported :-
-
-
-| Class                    | Module | Description |
-| --- | --- | --- |
-| java.awt.BufferedImage | icon-generator-swing | A Swing buffered image. |
-| javax.swing.Icon | icon-generator-swing | A Swing icon. |
-| org.eclipse.swt.graphics.Image | icon-generator-swt | An SWT image. |
-| javafx.scene.canvas.Canvas | icon-generator-java | A JavaFX canvas. |
+Now you can use the IconBuilder.build() for the toolkit you are using.
+Currently only the Java2D toolkit (*java.awt.BufferedImage*
+and *javax.swing.Icon*) and JavaFX (*javafx.scene.canvas.Canvas*) implementations
+are provided in this core module, but there is an SWT add-on (*icon-generator-swt*)
+and other toolkit implementations may be released later.
 
 ### Generate an ImageIcon for use in Swing
 

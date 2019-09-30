@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sshtools</groupId>
+		<artifactId>icon-generator</artifactId>
+		<version>1.1.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>icon-generator-javafx</artifactId>
+	<name>An extension to icon-generator to generate icons for the JavaFX Toolkit</name>
+	<description>This extension to icon-generator will generate JavaFX icons drawn on a canvas. Simply add it to your
+classpath and a new generator will be available for javafx.scene.canvas.Canvas objects.</description>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icon-generator-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>java11plus</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.openjfx</groupId>
+					<artifactId>javafx-graphics</artifactId>
+					<version>11</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>

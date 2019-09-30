@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<swt.version>3.112.0</swt.version>
+	</properties>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sshtools</groupId>
+		<artifactId>icon-generator</artifactId>
+		<version>1.1.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>icon-generator-swt</artifactId>
+	<name>An extension to icon-generator to generate icons for the Standard Widget Toolkit (SWT)</name>
+	<description>This extension to icon-generator will generate SWT icons. Simply add it to your
+classpath and a new generator will be available for org.eclipse.swt.graphics.Image objects. See README.md</description>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icon-generator-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>swt-linux-amd64</id>
+			<activation>
+				<os>
+					<arch>amd64</arch>
+					<name>linux</name>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+					<version>${swt.version}</version>
+					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
+						pull in earlier versions jars for different architectures! -->
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.platform</groupId>
+							<artifactId>org.eclipse.swt</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-linux-x86</id>
+			<activation>
+				<os>
+					<arch>x86</arch>
+					<name>linux</name>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+					<version>${swt.version}</version>
+					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
+						pull in earlier versions jars for different architectures! -->
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.platform</groupId>
+							<artifactId>org.eclipse.swt</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-windows-amd64</id>
+			<activation>
+				<os>
+					<arch>amd64</arch>
+					<family>windows</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+					<version>${swt.version}</version>
+					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
+						pull in earlier versions jars for different architectures! -->
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.platform</groupId>
+							<artifactId>org.eclipse.swt</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-windows-x86</id>
+			<activation>
+				<os>
+					<arch>x86</arch>
+					<family>windows</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+					<version>${swt.version}</version>
+					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
+						pull in earlier versions jars for different architectures! -->
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.platform</groupId>
+							<artifactId>org.eclipse.swt</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-mac-amd64</id>
+			<activation>
+				<os>
+					<arch>amd64</arch>
+					<family>mac</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+					<version>${swt.version}</version>
+					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
+						pull in earlier versions jars for different architectures! -->
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.platform</groupId>
+							<artifactId>org.eclipse.swt</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>
