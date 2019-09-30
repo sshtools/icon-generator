@@ -36,14 +36,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
 					<version>${swt.version}</version>
-					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
-						pull in earlier versions jars for different architectures! -->
-					<exclusions>
-						<exclusion>
-							<groupId>org.eclipse.platform</groupId>
-							<artifactId>org.eclipse.swt</artifactId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -60,14 +52,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
 					<version>${swt.version}</version>
-					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
-						pull in earlier versions jars for different architectures! -->
-					<exclusions>
-						<exclusion>
-							<groupId>org.eclipse.platform</groupId>
-							<artifactId>org.eclipse.swt</artifactId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -84,14 +68,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
 					<version>${swt.version}</version>
-					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
-						pull in earlier versions jars for different architectures! -->
-					<exclusions>
-						<exclusion>
-							<groupId>org.eclipse.platform</groupId>
-							<artifactId>org.eclipse.swt</artifactId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -108,14 +84,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
 					<version>${swt.version}</version>
-					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
-						pull in earlier versions jars for different architectures! -->
-					<exclusions>
-						<exclusion>
-							<groupId>org.eclipse.platform</groupId>
-							<artifactId>org.eclipse.swt</artifactId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -132,14 +100,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
 					<version>${swt.version}</version>
-					<!-- Workaround .. without excluding SWT itself here, Maven wants to 
-						pull in earlier versions jars for different architectures! -->
-					<exclusions>
-						<exclusion>
-							<groupId>org.eclipse.platform</groupId>
-							<artifactId>org.eclipse.swt</artifactId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
