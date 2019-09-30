@@ -24,10 +24,12 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 	</dependencies>
 	<profiles>
 		<profile>
-			<id>swt-linux-amd64</id>
+			<!-- There are no longer any 32 bit SWT builds for Linux it seems, 
+			     this should at least let us built. Some hackery may be needed
+			     if you wish to run on 32 bit. -->
+			<id>swt-linux</id>
 			<activation>
 				<os>
-					<arch>amd64</arch>
 					<name>linux</name>
 				</os>
 			</activation>
@@ -35,38 +37,6 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 				<dependency>
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-					<version>${swt.version}</version>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>swt-linux-x86</id>
-			<activation>
-				<os>
-					<arch>x86</arch>
-					<name>linux</name>
-				</os>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.eclipse.platform</groupId>
-					<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
-					<version>${swt.version}</version>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>swt-linux-i386</id>
-			<activation>
-				<os>
-					<arch>i386</arch>
-					<name>linux</name>
-				</os>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.eclipse.platform</groupId>
-					<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
 					<version>${swt.version}</version>
 				</dependency>
 			</dependencies>
