@@ -25,7 +25,8 @@
 	</licenses>
 	<scm>
 		<url>https://github.com/sshtools/icon-generator/</url>
-		<connection>https://github.com/sshtools/icon-generator.git</connection>
+		<connection>scm:git:https://github.com/sshtools/icon-generator.git</connection>
+		<developerConnection>scm:git:https://github.com/sshtools/icon-generator.git</developerConnection>
 	</scm>
 	<developers>
 		<developer>
@@ -66,6 +67,16 @@
 			</extension>
 		</extensions>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.8.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
 			<plugin>
 				<groupId>pw.krejci</groupId>
 				<artifactId>multi-release-jar-maven-plugin</artifactId>
