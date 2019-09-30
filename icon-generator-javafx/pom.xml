@@ -8,6 +8,7 @@
 		<version>1.1.0</version>
 		<relativePath>..</relativePath>
 	</parent>
+	<packaging>multi-release-jar</packaging>
 	<artifactId>icon-generator-javafx</artifactId>
 	<name>An extension to icon-generator to generate icons for the JavaFX Toolkit</name>
 	<description>This extension to icon-generator will generate JavaFX icons drawn on a canvas. Simply add it to your
