@@ -11,6 +11,5 @@
     <artifactId>icon-generator-common</artifactId>
 	<name>Icon Generator Common</name>
 	<description>Contains the Icon Generator core and shared classes.</description>
-	<packaging>multi-release-jar</packaging>
 
 </project>

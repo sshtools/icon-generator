@@ -4,8 +4,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sshtools</groupId>
@@ -52,20 +50,13 @@
 		</repository>
 	</distributionManagement>
 
-	<modules>
-		<module>icon-generator-common</module>
-		<module>icon-generator-swing</module>
-		<module>icon-generator-swt</module>
-		<module>icon-generator-javafx</module>
-	</modules>
+    <modules>
+        <module>icon-generator-common</module>
+        <module>icon-generator-swing</module>
+        <module>icon-generator-swt</module>
+        <module>icon-generator-javafx</module>
+    </modules>
 	<build>
-		<extensions>
-			<extension>
-				<groupId>pw.krejci</groupId>
-				<artifactId>multi-release-jar-maven-plugin</artifactId>
-				<version>0.1.5</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -78,21 +69,12 @@
 				<version>3.0.0</version>
 			</plugin>
 			<plugin>
-				<groupId>pw.krejci</groupId>
-				<artifactId>multi-release-jar-maven-plugin</artifactId>
-				<version>0.1.5</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<mainModuleInfo>9</mainModuleInfo>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<release>8</release>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -119,8 +101,7 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<failOnError>false</failOnError>
-							<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    		<javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
 							<!-- switch on dependency-driven aggregation -->
 							<includeDependencySources>false</includeDependencySources>
 							<dependencySourceIncludes>

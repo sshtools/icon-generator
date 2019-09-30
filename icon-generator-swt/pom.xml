@@ -11,7 +11,6 @@
 		<version>1.1.0</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<packaging>multi-release-jar</packaging>
 	<artifactId>icon-generator-swt</artifactId>
 	<name>An extension to icon-generator to generate icons for the Standard Widget Toolkit (SWT)</name>
 	<description>This extension to icon-generator will generate SWT icons. Simply add it to your
