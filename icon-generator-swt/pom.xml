@@ -56,6 +56,22 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 			</dependencies>
 		</profile>
 		<profile>
+			<id>swt-linux-686</id>
+			<activation>
+				<os>
+					<arch>686</arch>
+					<name>linux</name>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+					<version>${swt.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>swt-windows-amd64</id>
 			<activation>
 				<os>
