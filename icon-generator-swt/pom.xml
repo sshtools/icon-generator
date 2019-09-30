@@ -56,10 +56,10 @@ classpath and a new generator will be available for org.eclipse.swt.graphics.Ima
 			</dependencies>
 		</profile>
 		<profile>
-			<id>swt-linux-686</id>
+			<id>swt-linux-i386</id>
 			<activation>
 				<os>
-					<arch>686</arch>
+					<arch>i386</arch>
 					<name>linux</name>
 				</os>
 			</activation>
