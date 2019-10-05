@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.sshtools.icongenerator.AwesomeIcon;
 import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconUtil;
 
@@ -143,25 +144,43 @@ public class Java2DIconCanvas {
 
 		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2));
 
-		// Text
-		isIcon = builder.icon() != null;
-
-		if (isIcon) {
-			text = builder.icon().toString();
-			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
-					fixedFontSize == -1 ? (int) bounds.width : fixedFontSize);
-		} else {
-			text = builder.text();
-			switch (builder.textCase()) {
-			case LOWER:
-				text = text.toLowerCase();
+		text = builder.text();
+		if(text == null)
+			text = "";
+		switch (builder.textCase()) {
+		case LOWER:
+			text = text.toLowerCase();
+			break;
+		case UPPER:
+			text = text.toUpperCase();
+			break;
+		default:
+			break;
+		}
+		
+		// Icon
+		AwesomeIcon awesomeIcon = builder.icon();
+		if(awesomeIcon == null) {
+			switch(builder.awesomeIconMode()) {
+			case AUTO_MATCH:
+				awesomeIcon = AwesomeIcon.match(text);
 				break;
-			case UPPER:
-				text = text.toUpperCase();
+			case AUTO_TEXT:
+				awesomeIcon = AwesomeIcon.icon(text);
 				break;
 			default:
 				break;
 			}
+		}
+		
+		// Text
+		isIcon = awesomeIcon != null;
+
+		if (isIcon) {
+			text = awesomeIcon.toString();
+			font = getIconFont().deriveFont(builder.bold() ? Font.BOLD : Font.PLAIN,
+					fixedFontSize == -1 ? (int) bounds.width : fixedFontSize);
+		} else {
 
 			font = new Font(builder.fontName(), builder.bold() ? Font.BOLD : Font.PLAIN,
 					fixedFontSize == -1 ? IconUtil.pixelsToPoints((int) Math.min(bounds.width, bounds.height))

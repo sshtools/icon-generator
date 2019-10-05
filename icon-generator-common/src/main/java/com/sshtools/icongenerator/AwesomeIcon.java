@@ -809,4 +809,60 @@ public enum AwesomeIcon {
 	public String toString() {
 		return String.valueOf(character);
 	}
+	
+	/**
+	 * Get the best icon given to use given the text. If the text cannot be matched
+	 * to a font awesome icon, then a random one will be picked based on the text
+	 * hashCode.
+	 * 
+	 * @param text text to base icon on
+	 * @return icon
+	 */
+	public static AwesomeIcon icon(String text) {
+		text = text == null ? "" : text;
+		AwesomeIcon icon = match(text);
+
+		// If we found no matches, pick an icon based on the hash code
+		if (icon == null) {
+			icon = AwesomeIcon.values()[Math.abs(text.hashCode())
+					% AwesomeIcon.values().length];
+		}
+		
+		return icon;
+	}
+
+	/**
+	 * Get the closes matching icon given the text. If no icon matches,
+	 * <code>null</code> will be returned.
+	 * 
+	 * @param text text
+	 * @return closest icon
+	 */
+	public static AwesomeIcon match(String text) {
+		if(text == null || text.length() == 0)
+			return null;
+		AwesomeIcon icon = null;
+		// Try first getting an icon by matching words from the resource
+		// name
+		String[] words = IconUtil.alphaOnly(text).split("\\s+");
+		int iconMatches = 0;
+		for (AwesomeIcon a : AwesomeIcon.values()) {
+			final String ename = a.name().replace("_", " ");
+			String[] iconWords = ename.split("\\s+");
+			int matches = 0;
+			for (String w : words) {
+				for (String iw : iconWords) {
+					if (iw.equalsIgnoreCase(w)) {
+						matches++;
+						break;
+					}
+				}
+			}
+			if (matches > iconMatches) {
+				icon = a;
+				iconMatches = matches;
+			}
+		}
+		return icon;
+	}
 }

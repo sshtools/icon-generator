@@ -49,6 +49,32 @@ public class IconBuilder {
 		LOWER, ORIGINAL
 	}
 
+	/**
+	 * How (or if) to select a font awesome icon
+	 */
+	public enum AwesomeIconMode {
+		/**
+		 * Do not use a an {@link AwesomeIcon}. Will be set if {@link IconBuilder#icon(AwesomeIcon)}
+		 * is called with <code>null</code>
+		 */
+		NONE,
+		/**
+		 * Use a specific icon. Will be set if {@link IconBuilder#icon(AwesomeIcon)}
+		 * is called with anything other than <code>null</code>
+		 */
+		SPECIFIC, 
+		/**
+		 * Automatically select an awesome icon based on the text, but default to 
+		 * picking one based on the hash code of the text if none can be found.
+		 */ 
+		AUTO_MATCH,
+		/**
+		 * Automatically select an awesome icon based on the text, but default to 
+		 * picking one based on the hash code of the text if none can be found.
+		 */
+		AUTO_TEXT,
+	}
+
 	private IconShape shape = IconShape.RECTANGLE;
 	private String text;
 	private float borderThickness;
@@ -59,6 +85,7 @@ public class IconBuilder {
 	private boolean isBold;
 	private TextCase textCase;
 	private float radius;
+	private AwesomeIconMode awesomeIconMode = AwesomeIconMode.NONE;
 	private int color;
 	private AwesomeIcon icon;
 	private Map<Class<?>, IconGenerator<?>> generators = new HashMap<Class<?>, IconGenerator<?>>();
@@ -133,13 +160,16 @@ public class IconBuilder {
 	}
 
 	/**
-	 * Set the icon to display on the background.
+	 * Set the icon to display on the background. If set to <code>null</code>, 
+	 * {@link #awesomeIconMode()} will be set to {@link AwesomeIconMode#NONE}. 
+	 * If set to anything other than null, {@link #awesomeIconMode()} will be set to {@link AwesomeIconMode#SPECIFIC}.
 	 * 
 	 * @param icon
 	 * @return this instance for chaining
 	 */
 	public IconBuilder icon(AwesomeIcon icon) {
 		this.icon = icon;
+		awesomeIconMode = icon == null ? AwesomeIconMode.NONE : AwesomeIconMode.SPECIFIC;
 		return this;
 	}
 
@@ -194,6 +224,27 @@ public class IconBuilder {
 	public IconBuilder textColor(int color) {
 		this.textColor = color;
 		return this;
+	}
+	
+	/**
+	 * Set the mode of selecting the pictorial <code>Awesome Icon</code>. 
+	 * 
+	 * @param mode
+	 *            awesome icon selection mode
+	 * @return this instance for chaining
+	 */
+	public IconBuilder awesomeIconMode(AwesomeIconMode awesomeIconMode) {
+		this.awesomeIconMode = awesomeIconMode;
+		return this;
+	}
+	
+	/**
+	 * Get the mode of selecting the pictorial <code>Awesome Icon</code>. 
+	 * 
+	 * @return awesome icon selection mode
+	 */
+	public AwesomeIconMode awesomeIconMode() {
+		return awesomeIconMode;
 	}
 
 	/**
@@ -446,5 +497,4 @@ public class IconBuilder {
 		this.color = color;
 		return this;
 	}
-
 }

@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
+import com.sshtools.icongenerator.AwesomeIcon;
 import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconBuilder.IconShape;
 
@@ -54,27 +55,45 @@ public class SWTIconCanvas {
 		paint = new Color(display, getColor(builder.color()));
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
+		
+		text = builder.text();
+		if(text == null)
+			text = "";
+		switch (builder.textCase()) {
+		case LOWER:
+			text = text.toLowerCase();
+			break;
+		case UPPER:
+			text = text.toUpperCase();
+			break;
+		default:
+			break;
+		}
+		
+		// Icon
+		AwesomeIcon awesomeIcon = builder.icon();
+		if(awesomeIcon == null) {
+			switch(builder.awesomeIconMode()) {
+			case AUTO_MATCH:
+				awesomeIcon = AwesomeIcon.match(text);
+				break;
+			case AUTO_TEXT:
+				awesomeIcon = AwesomeIcon.icon(text);
+				break;
+			default:
+				break;
+			}
+		}
 
 		// Text
 		int fontSize = fixedFontSize == -1 ? (int) (Math.min(bounds.width, bounds.height) / 2.5) : fixedFontSize;
-		if (builder.icon() != null) {
-			text = builder.icon().toString();
+		if (awesomeIcon != null) {
+			text = awesomeIcon.toString();
 			FontData iconFont = getIconFont();
 			FontData fontData = new FontData(iconFont.name, fontSize, bold ? SWT.BOLD : SWT.NONE);
 			font = new Font(display, fontData);
 
 		} else {
-			text = builder.text();
-			switch (builder.textCase()) {
-			case LOWER:
-				text = text.toLowerCase();
-				break;
-			case UPPER:
-				text = text.toUpperCase();
-				break;
-			default:
-				break;
-			}
 			FontData iconFont = getIconFont();
 			FontData fontData = new FontData(iconFont.name, fontSize, bold ? SWT.BOLD : SWT.NONE);
 			font = new Font(display, fontData);

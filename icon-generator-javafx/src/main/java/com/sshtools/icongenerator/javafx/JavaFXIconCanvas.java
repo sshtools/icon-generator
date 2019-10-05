@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.sshtools.icongenerator.AwesomeIcon;
 import com.sshtools.icongenerator.IconBuilder;
 import com.sshtools.icongenerator.IconBuilder.IconShape;
 
@@ -40,28 +41,46 @@ public class JavaFXIconCanvas {
 		paint = getColor(builder.color());
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
+		
+		text = builder.text();
+		if(text == null)
+			text = "";
+		switch (builder.textCase()) {
+		case LOWER:
+			text = text.toLowerCase();
+			break;
+		case UPPER:
+			text = text.toUpperCase();
+			break;
+		default:
+			break;
+		}
+
+		// Icon
+		AwesomeIcon awesomeIcon = builder.icon();
+		if(awesomeIcon == null) {
+			switch(builder.awesomeIconMode()) {
+			case AUTO_MATCH:
+				awesomeIcon = AwesomeIcon.match(text);
+				break;
+			case AUTO_TEXT:
+				awesomeIcon = AwesomeIcon.icon(text);
+				break;
+			default:
+				break;
+			}
+		}
 
 		// Text
 		double fontSize = fixedFontSize == -1 ? (Math.min(bounds.getWidth(), bounds.getHeight()) / 2.5) : fixedFontSize;
-		if (builder.icon() != null) {
-			text = builder.icon().toString();
+		if (awesomeIcon != null) {
+			text = awesomeIcon.toString();
 			font = getIconFont();
 			if (bold)
 				font = Font.font(font.getFamily(), FontWeight.BOLD, fontSize);
 			else
 				font = Font.font(font.getFamily(), FontWeight.NORMAL, fontSize);
 		} else {
-			text = builder.text();
-			switch (builder.textCase()) {
-			case LOWER:
-				text = text.toLowerCase();
-				break;
-			case UPPER:
-				text = text.toUpperCase();
-				break;
-			default:
-				break;
-			}
 			if (builder.fontName() != null && !builder.fontName().equals(""))
 				font = Font.font(builder.fontName(), bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize);
 			else {

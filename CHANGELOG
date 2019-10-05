@@ -1,4 +1,14 @@
-1.0.3
+1.1.2
+-----
+
+* Added methods in AwesomeIcon for selecting the icon based on text
+
+1.1.1
+-----
+
+* Apache license
+
+1.1.0
 -----
 
 * Separated Swing and JavaFX into separate add-on modules. The core is now totally toolkit agnostic.

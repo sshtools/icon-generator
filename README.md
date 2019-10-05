@@ -112,6 +112,15 @@ builder.bold(true);
 
 ```java
 builder.icon(AwesomeIcon.ADDRESS_BOOK);
+
+// or
+
+builder.awesomeIconMode(AwesomeIconMode.AUTO_TEXT);
+
+// or
+
+builder.awesomeIconMode(AwesomeIconMode.AUTO_MATCH);
+ 
 ```
 
 ## Generate The Icon
@@ -124,6 +133,7 @@ following are supported :-
 | Class                    | Module | Description |
 | --- | --- | --- |
 | java.awt.BufferedImage | icon-generator-swing | A Swing buffered image. |
+| java.awt.Image | icon-generator-swing | A Swing buffered image. |
 | javax.swing.Icon | icon-generator-swing | A Swing icon. |
 | org.eclipse.swt.graphics.Image | icon-generator-swt | An SWT image. |
 | javafx.scene.canvas.Canvas | icon-generator-java | A JavaFX canvas. |
