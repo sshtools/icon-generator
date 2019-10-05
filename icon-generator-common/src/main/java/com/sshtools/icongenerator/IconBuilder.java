@@ -139,6 +139,7 @@ public class IconBuilder {
 	 * 
 	 * @param <T> native type of icon
 	 * @param iconClass class of native icon to return
+	 * @param args additional arguments to supply to generator
 	 * @return icon
 	 */
 	@SuppressWarnings("unchecked")
@@ -164,7 +165,7 @@ public class IconBuilder {
 	 * {@link #awesomeIconMode()} will be set to {@link AwesomeIconMode#NONE}. 
 	 * If set to anything other than null, {@link #awesomeIconMode()} will be set to {@link AwesomeIconMode#SPECIFIC}.
 	 * 
-	 * @param icon
+	 * @param icon specific icon to set
 	 * @return this instance for chaining
 	 */
 	public IconBuilder icon(AwesomeIcon icon) {
@@ -185,8 +186,7 @@ public class IconBuilder {
 	/**
 	 * Set the width
 	 * 
-	 * @param width
-	 *            with
+	 * @param width width
 	 * @return this instance for chaining
 	 */
 	public IconBuilder width(float width) {
@@ -197,7 +197,7 @@ public class IconBuilder {
 	/**
 	 * Set the height
 	 * 
-	 * @param height
+	 * @param height height
 	 * @return this instance for chaining
 	 */
 	public IconBuilder height(float height) {
@@ -229,7 +229,7 @@ public class IconBuilder {
 	/**
 	 * Set the mode of selecting the pictorial <code>Awesome Icon</code>. 
 	 * 
-	 * @param mode
+	 * @param awesomeIconMode
 	 *            awesome icon selection mode
 	 * @return this instance for chaining
 	 */
