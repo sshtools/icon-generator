@@ -1,3 +1,14 @@
+1.0.4
+-----
+
+* Apache license (this was always supposed to be Apache!)
+
+1.0.3
+-----
+
+* Separated all toolkits into distinct modules.
+* Java 9+ compatibility (although not modules yet due to Maven Javadoc bugs!)
+
 1.0.2
 -----
 
