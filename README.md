@@ -1,5 +1,5 @@
 # icon-generator
-A simple library for generating Java2D (Swing/AWT), JavaFX and [SWT](https://github.com/sshtools/icon-generator-swt) icons in Java. 
+A simple library for generating Java2D (Swing/AWT), JavaFX and SWT icons in Java. 
 
 ![](src/web/images/sample.png)
 
