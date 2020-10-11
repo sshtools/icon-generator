@@ -8,11 +8,11 @@
 	<parent>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator</artifactId>
-		<version>1.1.2</version>
+		<version>1.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>icon-generator-swt</artifactId>
-	<name>An extension to icon-generator to generate icons for the Standard Widget Toolkit (SWT)</name>
+	<name>Icon generator for SWT Toolkit</name>
 	<description>This extension to icon-generator will generate SWT icons. Simply add it to your
 classpath and a new generator will be available for org.eclipse.swt.graphics.Image objects. See README.md</description>
 	<dependencies>

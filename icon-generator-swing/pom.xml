@@ -8,11 +8,11 @@
 	 <parent>
 	    <groupId>com.sshtools</groupId>
 	    <artifactId>icon-generator</artifactId>
-		<version>1.1.2</version>
+		<version>1.2-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 	<artifactId>icon-generator-swing</artifactId>
-	<name>An extension to icon-generator to generate icons for the Swing Toolkit</name>
+	<name>Icon generator for Swing/AWT Toolkit</name>
 	<description>This extension to icon-generator will generate Swing icons. Simply add it to your
 classpath and a new generator will be available for javax.swing.Icon objects, java.awt.Image (or java.awt.image.BufferImage) objects. See README.md</description>
 	<dependencies>

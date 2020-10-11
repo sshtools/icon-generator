@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sshtools</groupId>
 	<artifactId>icon-generator</artifactId>
-	<version>1.1.2</version>
+	<version>1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>A simple icon generator</name>
 	<description>This simple icon generator is intended to be an icon generation library for multiple toolkits. Currently a 3 implementations are available, one for Java2d (AWT/Swing), one for JavaFX and one for SWT, all available as a separate add-on modules.</description>
@@ -73,8 +73,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>8</source>
-					<target>8</target>
+					<source>9</source>
+					<target>9</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -101,7 +101,7 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
+							<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
 							<!-- switch on dependency-driven aggregation -->
 							<includeDependencySources>false</includeDependencySources>
 							<dependencySourceIncludes>
