@@ -18,20 +18,10 @@ classpath and a new generator will be available for javafx.scene.canvas.Canvas o
 			<artifactId>icon-generator-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>11</version>
+		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>java11plus</id>
-			<activation>
-				<jdk>[9,)</jdk>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-graphics</artifactId>
-					<version>11</version>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 </project>
