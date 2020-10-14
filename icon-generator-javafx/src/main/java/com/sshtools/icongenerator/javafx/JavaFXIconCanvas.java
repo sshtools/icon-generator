@@ -170,7 +170,7 @@ public class JavaFXIconCanvas {
 	private static Font getIconFont() {
 		if (iconFont == null) {
 			try {
-				final URL resource = JavaFXIconCanvas.class.getResource("/fontawesome-webfont.ttf");
+				final URL resource = AwesomeIcon.class.getResource("fontawesome-webfont.ttf");
 				InputStream in = resource == null ? null : resource.openStream();
 				if (in == null) {
 					throw new RuntimeException(
