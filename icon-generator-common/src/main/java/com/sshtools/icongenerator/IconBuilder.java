@@ -719,7 +719,7 @@ public class IconBuilder {
 		if (text == null)
 			return "";
 		String v = textCase.textForCase(textContent.textForContent(text));
-		return maxTextLength != -1 && v.length() > maxTextLength ? text.substring(0, maxTextLength) : text;
+		return maxTextLength != -1 && v.length() > maxTextLength ? v.substring(0, maxTextLength) : v;
 	}
 
 	/**
