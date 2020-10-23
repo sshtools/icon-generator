@@ -64,7 +64,7 @@ public class Java2DIconCanvas {
 		bounds = new Rectangle2D.Float(0, 0, builder.width(), builder.height());
 
 		// Configure the shape
-		switch (builder.shape()) {
+		switch (builder.computedShape()) {
 		case ROUNDED:
 			shape = new RoundRectangle2D.Float();
 			((RoundRectangle2D) shape).setRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, builder.radius(),
@@ -80,7 +80,8 @@ public class Java2DIconCanvas {
 			shape.setFrame(bounds);
 			break;
 		}
-		final Color color = new Color(builder.color());
+		int bg = builder.computedColor();
+		final Color color = new Color(bg);
 		paint = color;
 
 		// Border
@@ -110,69 +111,15 @@ public class Java2DIconCanvas {
 		fixedFontSize = builder.fontSize();
 
 		textStroke = new BasicStroke(Math.max(1, border));
-		int textColor = builder.textColor();
-		if (textColor < 0) {
-			/*
-			 * Give the text either black or white depending on brightness of background
-			 */
-			float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), new float[3]);
-			switch (textColor) {
-			case IconBuilder.AUTO_TEXT_COLOR:
-				if (hsb[2] > 0.9f) {
-					textColor = Color.BLACK.getRGB();
-				} else {
-					textColor = Color.WHITE.getRGB();
-				}
-				break;
-			case IconBuilder.AUTO_TEXT_COLOR_WHITE:
-				if (hsb[1] < 0.1f && hsb[2] > 0.1f) {
-					textColor = Color.BLACK.getRGB();
-				} else {
-					textColor = Color.WHITE.getRGB();
-				}
-				break;
-			case IconBuilder.AUTO_TEXT_COLOR_BLACK:
-				if (hsb[1] > 0.9f || hsb[2] > 0.9f) {
-					textColor = Color.BLACK.getRGB();
-				} else {
-					textColor = Color.WHITE.getRGB();
-				}
-				break;
-			}
-		}
-		textPaint = new Color(textColor);
+		textPaint = new Color(builder.computedTextColor(bg));
 
 		bounds.setRect(bounds.x + border, bounds.y + border, bounds.width - (border * 2), bounds.height - (border * 2));
 
-		text = builder.text();
-		if(text == null)
-			text = "";
-		switch (builder.textCase()) {
-		case LOWER:
-			text = text.toLowerCase();
-			break;
-		case UPPER:
-			text = text.toUpperCase();
-			break;
-		default:
-			break;
-		}
+		text = builder.computedText();
 		
 		// Icon
-		AwesomeIcon awesomeIcon = builder.icon();
-		if(awesomeIcon == null) {
-			switch(builder.awesomeIconMode()) {
-			case AUTO_MATCH:
-				awesomeIcon = AwesomeIcon.match(text);
-				break;
-			case AUTO_TEXT:
-				awesomeIcon = AwesomeIcon.icon(text);
-				break;
-			default:
-				break;
-			}
-		}
-		
+		AwesomeIcon awesomeIcon = builder.computedIcon();
+
 		// Text
 		isIcon = awesomeIcon != null;
 
@@ -269,7 +216,7 @@ public class Java2DIconCanvas {
 	private static Font getIconFont() {
 		if (iconFont == null) {
 			try {
-				final URL resource = Java2DIconCanvas.class.getResource("/fontawesome-webfont.ttf");
+				final URL resource = AwesomeIcon.class.getResource("fontawesome-webfont.ttf");
 				InputStream in = resource == null ? null : resource.openStream();
 				if (in == null) {
 					throw new RuntimeException(

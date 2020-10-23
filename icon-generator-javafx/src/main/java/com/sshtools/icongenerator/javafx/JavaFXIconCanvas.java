@@ -37,39 +37,16 @@ public class JavaFXIconCanvas {
 
 		bounds = new BoundingBox(0, 0, (int) builder.width(), (int) builder.height());
 		radius = (int) builder.radius();
-		shape = builder.shape();
-		paint = getColor(builder.color());
+		shape = builder.computedShape();
+		int bg = builder.computedColor();
+		paint = getColor(bg);
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
 		
-		text = builder.text();
-		if(text == null)
-			text = "";
-		switch (builder.textCase()) {
-		case LOWER:
-			text = text.toLowerCase();
-			break;
-		case UPPER:
-			text = text.toUpperCase();
-			break;
-		default:
-			break;
-		}
+		text = builder.computedText();
 
 		// Icon
-		AwesomeIcon awesomeIcon = builder.icon();
-		if(awesomeIcon == null) {
-			switch(builder.awesomeIconMode()) {
-			case AUTO_MATCH:
-				awesomeIcon = AwesomeIcon.match(text);
-				break;
-			case AUTO_TEXT:
-				awesomeIcon = AwesomeIcon.icon(text);
-				break;
-			default:
-				break;
-			}
-		}
+		AwesomeIcon awesomeIcon = builder.computedIcon();
 
 		// Text
 		double fontSize = fixedFontSize == -1 ? (Math.min(bounds.getWidth(), bounds.getHeight()) / 2.5) : fixedFontSize;
@@ -92,7 +69,7 @@ public class JavaFXIconCanvas {
 			}
 		}
 		bold = builder.bold();
-		textPaint = getColor(builder.textColor());
+		textPaint = getColor(builder.computedTextColor(bg));
 
 	}
 

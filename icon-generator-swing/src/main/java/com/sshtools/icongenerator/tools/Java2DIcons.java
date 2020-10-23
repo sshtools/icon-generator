@@ -29,6 +29,8 @@ public class Java2DIcons extends JPanel {
 		setLayout(new GridLayout(10, 10, 2, 2));
 		for (int i = 0; i < 100; i++) {
 			IconBuilder ib = new IconBuilder();
+			ib.theme(Colors.MATERIAL);
+			ib.autoColor();
 			if (r.nextFloat() > 0.5)
 				ib.bold(true);
 			if (r.nextFloat() > 0.5)
@@ -43,7 +45,6 @@ public class Java2DIcons extends JPanel {
 			} else
 				ib.text(randWord());
 			ib.fontName("Sans");
-			ib.color(Colors.MATERIAL.color(ib.text()));
 			add(new JLabel(ib.build(Icon.class)));
 		}
 	}
