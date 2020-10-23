@@ -328,7 +328,7 @@ public class IconBuilder {
 
 	/**
 	 * Set the text color. This is either {@link #AUTO_TEXT_COLOR},
-	 * {@link #AUTO_RANDOM_TEXT_COLOR}, {@link #AUTO_TEXT_COLOR_WHITE},
+	 * {@link #RANDOM_TEXT_COLOR}, {@link #AUTO_TEXT_COLOR_WHITE},
 	 * {@link #AUTO_TEXT_COLOR_BLACK} or an RGB value encoded in least
 	 * significate 3 bytes.
 	 * 
@@ -405,7 +405,7 @@ public class IconBuilder {
 
 	/**
 	 * Get the text color. This is either {@link #AUTO_TEXT_COLOR},
-	 * {@link #AUTO_RANDOM_TEXT_COLOR}, {@link #AUTO_TEXT_COLOR_WHITE},
+	 * {@link #RANDOM_TEXT_COLOR}, {@link #AUTO_TEXT_COLOR_WHITE},
 	 * {@link #AUTO_TEXT_COLOR_BLACK} or an RGB value encoded in least
 	 * significate 3 bytes.
 	 * 
