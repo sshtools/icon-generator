@@ -19,18 +19,17 @@ import com.sshtools.icongenerator.IconBuilder.IconShape;
  * seed from {@link SWTIcons#r} if you want truly random every time.
  */
 public class SWTIcons {
-
 	private Random r = new Random(0);
 
 	SWTIcons(Shell shell) {
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 10;
 		gridLayout.makeColumnsEqualWidth = true;
-
 		shell.setLayout(gridLayout);
-
 		for (int i = 0; i < 100; i++) {
 			IconBuilder ib = new IconBuilder();
+			ib.theme(Colors.MATERIAL);
+			ib.autoColor();
 			if (r.nextFloat() > 0.5)
 				ib.bold(true);
 			if (r.nextFloat() > 0.5)
@@ -45,7 +44,6 @@ public class SWTIcons {
 			} else
 				ib.text(randWord());
 			ib.fontName("Sans");
-			ib.color(Colors.MATERIAL.color(ib.text()));
 			final Label label = new Label(shell, SWT.NONE);
 			label.setImage(ib.build(Image.class));
 		}
@@ -65,9 +63,7 @@ public class SWTIcons {
 	public static void main(String[] args) {
 		Display display = new Display();
 		Shell shell = new Shell(display);
-
 		new SWTIcons(shell);
-
 		shell.pack();
 		shell.open();
 		while (!shell.isDisposed()) {

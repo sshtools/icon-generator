@@ -33,6 +33,8 @@ public class JavaFXIcons extends Application {
 		for (int y = 0; y < 10; y++) {
 			for (int x = 0; x < 10; x++) {
 				IconBuilder ib = new IconBuilder();
+				ib.theme(Colors.MATERIAL);
+				ib.autoColor();
 				if (r.nextFloat() > 0.5)
 					ib.bold(true);
 				if (r.nextFloat() > 0.5)
@@ -47,7 +49,6 @@ public class JavaFXIcons extends Application {
 				} else
 					ib.text(randWord());
 				ib.fontName("Sans");
-				ib.color(Colors.MATERIAL.color(ib.text()));
 				grid.add(ib.build(Canvas.class), x, y);
 			}
 		}

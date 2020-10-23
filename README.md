@@ -18,7 +18,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-swing</artifactId>
-		<version>1.0.3</version>
+		<version>1.3.0</version>
 	</dependency>
 ```
 
@@ -28,7 +28,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-javafx</artifactId>
-		<version>1.0.3</version>
+		<version>1.3.0</version>
 	</dependency>
 ```
 
@@ -38,7 +38,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-swt</artifactId>
-		<version>1.0.3</version>
+		<version>1.3.0</version>
 	</dependency>
 ```
 
@@ -71,6 +71,10 @@ build.textColor(IconBuilder.AUTO_TEXT_COLOR);
 
 // or
 
+build.textColor(IconBuilder.RANDOM_TEXT_COLOR);
+
+// or
+
 build.textColor(IconBuilder.AUTO_TEXT_COLOR_WHITE);
 
 // or
@@ -80,12 +84,24 @@ build.textColor(IconBuilder.AUTO_TEXT_COLOR_BLACK);
 // and the background colour
 
 builder.color(0x00ff00); // green
+
+// or
+
+builder.color(IconBuilder.AUTO_COLOR); // based on text / icon
+
+// or
+
+builder.color(IconBuilder.RANDOM_COLOR); 
 ```
 
 
 ### Shape
 
 ```java
+
+builder.autoShape();
+
+// or
 
 builder.rect(); // rectangle
 
@@ -102,6 +118,14 @@ builder.rectRound(8); // rounded rectangle with 8px radius
 ```java
 
 builder.text("AB");
+
+// or a full word and a processing option
+
+builder.text("Actually Brilliant");
+builder.textCase(TextCase.UPPER);
+builder.textContext(TextContext.INITIALS);
+
+// Font
 builder.font("Monospaced");
 builder.fontSize(12); 
 builder.bold(true);
@@ -136,7 +160,7 @@ following are supported :-
 | java.awt.Image | icon-generator-swing | A Swing buffered image. |
 | javax.swing.Icon | icon-generator-swing | A Swing icon. |
 | org.eclipse.swt.graphics.Image | icon-generator-swt | An SWT image. |
-| javafx.scene.canvas.Canvas | icon-generator-java | A JavaFX canvas. |
+| javafx.scene.canvas.Canvas | icon-generator-javafx | A JavaFX canvas. |
 
 ### Generate an ImageIcon for use in Swing
 

@@ -26,7 +26,7 @@ import com.sshtools.icongenerator.IconBuilder.IconShape;
  * Helper for drawing SWT icons given an {@link IconBuilder}.
  */
 public class SWTIconCanvas {
-	private static final float SHADE_FACTORY = 0.9f;
+	private static final float SHADE_FACTOR = 0.9f;
 
 	private static FontData iconFont;
 
@@ -51,39 +51,16 @@ public class SWTIconCanvas {
 
 		bounds = new Rectangle(0, 0, (int) builder.width(), (int) builder.height());
 		radius = (int) builder.radius();
-		shape = builder.shape();
-		paint = new Color(display, getColor(builder.color()));
+		shape = builder.computedShape();
+		int bg = builder.computedColor();
+		paint = new Color(display, getColor(bg));
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
 		
-		text = builder.text();
-		if(text == null)
-			text = "";
-		switch (builder.textCase()) {
-		case LOWER:
-			text = text.toLowerCase();
-			break;
-		case UPPER:
-			text = text.toUpperCase();
-			break;
-		default:
-			break;
-		}
+		text = builder.computedText();
 		
 		// Icon
-		AwesomeIcon awesomeIcon = builder.icon();
-		if(awesomeIcon == null) {
-			switch(builder.awesomeIconMode()) {
-			case AUTO_MATCH:
-				awesomeIcon = AwesomeIcon.match(text);
-				break;
-			case AUTO_TEXT:
-				awesomeIcon = AwesomeIcon.icon(text);
-				break;
-			default:
-				break;
-			}
-		}
+		AwesomeIcon awesomeIcon = builder.computedIcon();
 
 		// Text
 		int fontSize = fixedFontSize == -1 ? (int) (Math.min(bounds.width, bounds.height) / 2.5) : fixedFontSize;
@@ -99,7 +76,7 @@ public class SWTIconCanvas {
 			font = new Font(display, fontData);
 		}
 		bold = builder.bold();
-		textPaint = new Color(display, getColor(builder.textColor()));
+		textPaint = new Color(display, getColor(builder.computedTextColor(bg)));
 
 	}
 
@@ -164,7 +141,7 @@ public class SWTIconCanvas {
 	private static FontData getIconFont() {
 		if (iconFont == null) {
 			try {
-				final URL resource = SWTIconCanvas.class.getResource("/fontawesome-webfont.ttf");
+				final URL resource = AwesomeIcon.class.getResource("fontawesome-webfont.ttf");
 
 				/*
 				 * SWT can't always load fonts from the classpath, and provides no way of using
@@ -222,7 +199,7 @@ public class SWTIconCanvas {
 	}
 
 	private static RGB getDarker(RGB color) {
-		return new RGB((int) (SHADE_FACTORY * color.red), (int) (SHADE_FACTORY * color.green),
-				(int) (SHADE_FACTORY * color.blue));
+		return new RGB((int) (SHADE_FACTOR * color.red), (int) (SHADE_FACTOR * color.green),
+				(int) (SHADE_FACTOR * color.blue));
 	}
 }
