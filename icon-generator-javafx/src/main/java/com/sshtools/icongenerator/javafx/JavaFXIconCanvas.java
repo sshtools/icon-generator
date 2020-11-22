@@ -29,9 +29,11 @@ public class JavaFXIconCanvas {
 	private int fixedFontSize;
 	private boolean bold;
 	private Color paint;
+	private Color borderPaint;
 	private IconShape shape;
 	private int radius;
 	private int border;
+	private Color backgroundPaint;
 
 	public JavaFXIconCanvas(IconBuilder builder) {
 
@@ -40,9 +42,16 @@ public class JavaFXIconCanvas {
 		shape = builder.computedShape();
 		int bg = builder.computedColor();
 		paint = getColor(bg);
+		borderPaint = getColor(builder.computedBorderColor());
+		backgroundPaint = paint;
+		if (builder.backgroundOpacity() != 255) {
+			backgroundPaint = new Color(paint.getRed(), paint.getGreen(), paint.getBlue(),
+					(float) builder.backgroundOpacity() / 255.0);
+		}
+
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
-		
+
 		text = builder.computedText();
 
 		// Icon
@@ -78,7 +87,7 @@ public class JavaFXIconCanvas {
 				this.bounds.getHeight());
 
 		// The background
-		canvas.setFill(paint);
+		canvas.setFill(backgroundPaint);
 
 		switch (shape) {
 		case ROUNDED:
@@ -97,7 +106,7 @@ public class JavaFXIconCanvas {
 
 		if (border > 0) {
 			canvas.setLineWidth(border);
-			canvas.setStroke(paint.darker());
+			canvas.setStroke(borderPaint);
 			BoundingBox borderBounds = new BoundingBox(actualBounds.getMinX() + (border / 2),
 					actualBounds.getMinY() + (border / 2), actualBounds.getWidth() - border,
 					actualBounds.getHeight() - border);
@@ -139,9 +148,9 @@ public class JavaFXIconCanvas {
 
 	private static Color getColor(int rgb) {
 		int red = (rgb >> 16) & 0x000000FF;
-		int green = (rgb >>8 ) & 0x000000FF;
+		int green = (rgb >> 8) & 0x000000FF;
 		int blue = (rgb) & 0x000000FF;
-		return new Color((double)red / 255d, (double)green / 255d, (double)blue / 255d , 1d);
+		return new Color((double) red / 255d, (double) green / 255d, (double) blue / 255d, 1d);
 	}
 
 	private static Font getIconFont() {

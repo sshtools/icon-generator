@@ -26,7 +26,6 @@ import com.sshtools.icongenerator.IconBuilder.IconShape;
  * Helper for drawing SWT icons given an {@link IconBuilder}.
  */
 public class SWTIconCanvas {
-	private static final float SHADE_FACTOR = 0.9f;
 
 	private static FontData iconFont;
 
@@ -37,8 +36,8 @@ public class SWTIconCanvas {
 	private int fixedFontSize;
 	private boolean bold;
 
-	private Device display;
 	private Color paint;
+	private Color borderPaint;
 
 	private IconShape shape;
 
@@ -46,14 +45,21 @@ public class SWTIconCanvas {
 
 	private int border;
 
+	private Color backgroundPaint;
+
 	public SWTIconCanvas(IconBuilder builder, Device display) {
-		this.display = display;
 
 		bounds = new Rectangle(0, 0, (int) builder.width(), (int) builder.height());
 		radius = (int) builder.radius();
 		shape = builder.computedShape();
 		int bg = builder.computedColor();
 		paint = new Color(display, getColor(bg));
+		borderPaint = new Color(display, getColor(builder.computedBorderColor()));
+		if(builder.backgroundOpacity() != 255) {
+			backgroundPaint = new Color(display, paint.getRed(), paint.getGreen(), paint.getBlue(), builder.backgroundOpacity());
+		}
+		else
+			backgroundPaint = paint;
 		border = (int) builder.border();
 		fixedFontSize = builder.fontSize();
 		
@@ -83,7 +89,7 @@ public class SWTIconCanvas {
 	public void draw(GC canvas) {
 		Rectangle actualBounds = new Rectangle(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
 		try {
-			canvas.setBackground(paint);
+			canvas.setBackground(backgroundPaint);
 			switch (shape) {
 			case ROUNDED:
 				canvas.fillRoundRectangle(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height,
@@ -99,7 +105,7 @@ public class SWTIconCanvas {
 
 			if (border > 0) {
 				canvas.setLineWidth(border);
-				canvas.setForeground(new Color(display, getDarker(paint.getRGB())));
+				canvas.setForeground(borderPaint);
 				actualBounds.x += border / 2;
 				actualBounds.y += border / 2;
 				actualBounds.width -= border;
@@ -198,8 +204,4 @@ public class SWTIconCanvas {
 		return iconFont;
 	}
 
-	private static RGB getDarker(RGB color) {
-		return new RGB((int) (SHADE_FACTOR * color.red), (int) (SHADE_FACTOR * color.green),
-				(int) (SHADE_FACTOR * color.blue));
-	}
 }
