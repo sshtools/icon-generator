@@ -43,7 +43,10 @@ public class IconBuilder {
 		AUTOMATIC;
 
 		public IconShape shapeForText(String text) {
-			return text == null ? ROUND : IconShape.values()[Math.abs(text.hashCode() % IconShape.values().length - 1)];
+			if(text == null|| this != IconShape.AUTOMATIC)
+				return this == IconShape.AUTOMATIC ? IconShape.ROUND : this;
+			else
+				return IconShape.values()[Math.abs(text.hashCode() % IconShape.values().length - 1)];
 		}
 	}
 
@@ -154,6 +157,7 @@ public class IconBuilder {
 	private float height, width;
 	private String fontName;
 	private int textColor;
+	private int borderColor;
 	private int fixedFontSize;
 	private boolean isBold;
 	private TextCase textCase;
@@ -165,6 +169,7 @@ public class IconBuilder {
 	private Map<Class<?>, IconGenerator<?>> generators = new HashMap<Class<?>, IconGenerator<?>>();
 	private int maxTextLength = -1;
 	private Colors theme;
+	private int backgroundOpacity= 255;
 
 	/**
 	 * Constructor.
@@ -327,10 +332,46 @@ public class IconBuilder {
 	}
 
 	/**
+	 * Set the border color. This is either {@link #AUTO_COLOR},
+	 * {@link #RANDOM_COLOR} or an RGB value encoded in least
+	 * significant 3 bytes.
+	 * 
+	 * @param color text color
+	 * @return this instance for chaining
+	 */
+	public IconBuilder borderColor(int color) {
+		this.borderColor = color;
+		return this;
+	}
+
+	/**
+	 * Set the border color. 
+	 * 
+	 * @param r red
+	 * @param g green
+	 * @param b blue
+	 * @return this instance for chaining
+	 */
+	public IconBuilder borderColor(int r, int g, int b) {
+		return borderColor(encodeRGB(r, g, b));
+	}
+
+	/**
+	 * Get the border color. This is either {@link #AUTO_COLOR},
+	 * {@link #RANDOM_COLOR} or an RGB value encoded in least
+	 * significant 3 bytes.
+	 * 
+	 * @return color text color
+	 */
+	public int borderColor() {
+		return borderColor;
+	}
+
+	/**
 	 * Set the text color. This is either {@link #AUTO_TEXT_COLOR},
 	 * {@link #RANDOM_TEXT_COLOR}, {@link #AUTO_TEXT_COLOR_WHITE},
 	 * {@link #AUTO_TEXT_COLOR_BLACK} or an RGB value encoded in least
-	 * significate 3 bytes.
+	 * significant 3 bytes.
 	 * 
 	 * @param color text color
 	 * @return this instance for chaining
@@ -674,6 +715,28 @@ public class IconBuilder {
 	}
 
 	/**
+	 * Get the opacity of the background. This is a value from 0 to
+	 * 255, with 0 being fully transparent, and 255 being full opaque.
+	 * 
+	 * @return background opacity
+	 */
+	public int backgroundOpacity() {
+		return backgroundOpacity;
+	}
+
+	/**
+	 * Get the opacity of the background. This is a value from 0 to
+	 * 255, with 0 being fully transparent, and 255 being full opaque. 
+	 * 
+	 * @param backgroundOpacity background opacity
+	 * @return this instance for chaining
+	 */
+	public IconBuilder backgroundOpacity(int backgroundOpacity) {
+		this.backgroundOpacity = backgroundOpacity;
+		return this;
+	}
+
+	/**
 	 * Get the color of the background. This is either {@link #AUTO_COLOR},
 	 * {@link #RANDOM_COLOR} or an RGB value encoded in least significate 3
 	 * bytes.
@@ -744,6 +807,26 @@ public class IconBuilder {
 			else {
 				return theme.color(text == null ? icon : text);
 			}
+		} else if (color == RANDOM_COLOR) {
+			if (theme == null)
+				return new Random().nextInt() & 0xffffff;
+			else {
+				return theme.randomColor();
+			}
+		} else {
+			return color;
+		}
+	}
+
+	/**
+	 * Compute the border color to use based on whether the {@link #color} is
+	 * {@link #AUTO_COLOR} or {@link #RANDOM_COLOR}.
+	 * 
+	 * @return computed color
+	 */
+	public int computedBorderColor() {
+		if (color == AUTO_COLOR) {
+			return computedColor();
 		} else if (color == RANDOM_COLOR) {
 			if (theme == null)
 				return new Random().nextInt() & 0xffffff;
@@ -853,7 +936,7 @@ public class IconBuilder {
 	}
 	
 	public static int encodeRGB(int r, int g, int b) {
-		return r  &0xff<< 16 | g &0xff << 8 | b &0xff;
+		return (r  &0xff)<< 16 | (g &0xff) << 8 | b &0xff;
 	}
 	
 	public static int[] decodeRGB(int v) {

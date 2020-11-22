@@ -37,6 +37,15 @@ public class Java2DIcons extends JPanel {
 				ib.border((int) (r.nextFloat() * 4f));
 			ib.shape(IconShape.values()[(int) (IconShape.values().length * r.nextFloat())]);
 			ib.width(48);
+			
+			if(r.nextFloat()  > 0.5) {
+				ib.border((int)( 1 + ( r.nextFloat()  * 3 ) ));
+				if(r.nextFloat()  > 0.5) {
+					ib.backgroundOpacity(0);	
+					ib.textColor(0);
+				}
+			}
+
 			ib.height(48);
 			if (r.nextFloat() > 0.5) {
 				ib.icon(AwesomeIcon.values()[(int) (AwesomeIcon.values().length * r.nextFloat())]);

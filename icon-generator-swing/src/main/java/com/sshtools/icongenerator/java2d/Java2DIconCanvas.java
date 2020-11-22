@@ -27,7 +27,6 @@ import com.sshtools.icongenerator.IconUtil;
  * Helper for drawing onto {@link Graphics2D} given an {@link IconBuilder}.
  */
 public class Java2DIconCanvas {
-	private static final float SHADE_FACTOR = 0.9f;
 
 	/*
 	 * How much to scale the 'available' space by to leave a margin around the
@@ -51,7 +50,7 @@ public class Java2DIconCanvas {
 	private Stroke borderStroke;
 	private Stroke textStroke;
 	private int fixedFontSize;
-	private Paint paint;
+	private Paint backgroundPaint;
 	private float border;
 	private float shrinkFactor = DEFAULT_SHRINK_FACTOR;
 	private boolean isIcon;
@@ -82,11 +81,15 @@ public class Java2DIconCanvas {
 		}
 		int bg = builder.computedColor();
 		final Color color = new Color(bg);
-		paint = color;
+		backgroundPaint = color;
+		if(builder.backgroundOpacity() != 255) {
+			backgroundPaint = new Color(color.getRed(), color.getGreen(), color.getBlue(), builder.backgroundOpacity());
+		}
 
 		// Border
 		border = builder.border();
 		if (border > 0) {
+			borderPaint = new Color(builder.computedBorderColor());
 			Rectangle2D.Float rect = new Rectangle2D.Float(bounds.x, bounds.y, bounds.width, bounds.height);
 			rect.x += border / 2;
 			rect.y += border / 2;
@@ -105,7 +108,6 @@ public class Java2DIconCanvas {
 				borderShape.setFrame(rect);
 			}
 
-			borderPaint = getDarker(color);
 			borderStroke = new BasicStroke(border);
 		}
 		fixedFontSize = builder.fontSize();
@@ -146,7 +148,7 @@ public class Java2DIconCanvas {
 			canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			// The background
-			canvas.setPaint(paint);
+			canvas.setPaint(backgroundPaint);
 			canvas.fill(shape);
 
 			// The border
@@ -244,10 +246,5 @@ public class Java2DIconCanvas {
 		canvas.draw(borderShape);
 		canvas.setPaint(p);
 		canvas.setStroke(s);
-	}
-
-	private static Color getDarker(Color color) {
-		return new Color((int) (SHADE_FACTOR * color.getRed()), (int) (SHADE_FACTOR * color.getGreen()),
-				(int) (SHADE_FACTOR * color.getBlue()));
 	}
 }
