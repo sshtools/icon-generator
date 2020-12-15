@@ -91,16 +91,16 @@ public class JavaFXIconCanvas {
 
 		switch (shape) {
 		case ROUNDED:
-			canvas.fillRoundRect(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth(),
-					actualBounds.getHeight(), radius, radius);
+			canvas.fillRoundRect(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth() - border,
+					actualBounds.getHeight() - border, radius, radius);
 			break;
 		case ROUND:
-			canvas.fillOval(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth(),
-					actualBounds.getHeight());
+			canvas.fillOval(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth() - border,
+					actualBounds.getHeight()  - border);
 			break;
 		default:
-			canvas.fillRect(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth(),
-					actualBounds.getHeight());
+			canvas.fillRect(actualBounds.getMinX(), actualBounds.getMinY(), actualBounds.getWidth() - border,
+					actualBounds.getHeight()  - border);
 			break;
 		}
 

@@ -42,7 +42,7 @@ public class JavaFXIcons extends Application {
 				ib.shape(IconShape.values()[(int) (IconShape.values().length * r.nextFloat())]);
 				ib.width(48);
 				ib.height(48);
-				
+				ib.backgroundOpacity(128);
 				if(r.nextFloat() > 0.5) {
 					ib.border((int)( 1 + ( r.nextFloat() * 3 ) ));
 					if(r.nextFloat() > 0.5) {

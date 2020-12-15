@@ -825,16 +825,16 @@ public class IconBuilder {
 	 * @return computed color
 	 */
 	public int computedBorderColor() {
-		if (color == AUTO_COLOR) {
+		if (borderColor == AUTO_COLOR) {
 			return computedColor();
-		} else if (color == RANDOM_COLOR) {
+		} else if (borderColor == RANDOM_COLOR) {
 			if (theme == null)
 				return new Random().nextInt() & 0xffffff;
 			else {
 				return theme.randomColor();
 			}
 		} else {
-			return color;
+			return borderColor;
 		}
 	}
 
