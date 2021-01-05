@@ -13,13 +13,18 @@ import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class JavaFXIconCanvas {
 
+	/**
+	 * TODO this is a work around to the fact that JavaFX has no Font Metrics and
+	 *      and accurate text placement seems impossible. 
+	 */
+	private static final double ADJUST_FACTOR = 0.125f;
+	
 	private static Font iconFont;
 
 	private Color textPaint;
@@ -58,7 +63,8 @@ public class JavaFXIconCanvas {
 		AwesomeIcon awesomeIcon = builder.computedIcon();
 
 		// Text
-		double fontSize = fixedFontSize == -1 ? (Math.min(bounds.getWidth(), bounds.getHeight()) / 2.5) : fixedFontSize;
+		double fontSize = fixedFontSize == -1 ? (Math.min(bounds.getWidth(), bounds.getHeight()) / 2.25)
+				: fixedFontSize;
 		if (awesomeIcon != null) {
 			text = awesomeIcon.toString();
 			font = getIconFont();
@@ -130,20 +136,34 @@ public class JavaFXIconCanvas {
 		canvas.setFill(textPaint);
 		Bounds b = reportSize(text, font);
 
-		canvas.fillText(text, (bounds.getWidth() - b.getWidth()) / 2d, (bounds.getHeight() + b.getHeight()) / 2d);
+		canvas.fillText(text, (int) ((bounds.getWidth() - b.getWidth()) / 2d),
+				(int) ((bounds.getHeight() / 2d) + (font.getSize() / 2f) - (font.getSize() * ADJUST_FACTOR)));
 
 	}
 
 	public Bounds reportSize(String s, Font myFont) {
-		Text text = new Text(s);
-		text.setFont(myFont);
-		Bounds tb = text.getBoundsInLocal();
-		Rectangle stencil = new Rectangle(tb.getMinX(), tb.getMinY(), tb.getWidth(), tb.getHeight());
+		double tw = computeTextWidth(myFont, s, Short.MAX_VALUE);
+		double th = computeTextHeight(myFont, s, Short.MAX_VALUE);
+		return new Rectangle(0, 0, tw, th).getBoundsInLocal();
+	}
 
-		Shape intersection = Shape.intersect(text, stencil);
+	static Text helper = new Text();
 
-		Bounds ib = intersection.getBoundsInLocal();
-		return ib;
+	static double computeTextWidth(Font font, String text, double wrappingWidth) {
+		helper.setText(text);
+		helper.setFont(font);
+		helper.setWrappingWidth(0);
+		double w = Math.min(helper.prefWidth(-1), wrappingWidth);
+		helper.setWrappingWidth((int) Math.ceil(w));
+		return Math.ceil(helper.getLayoutBounds().getWidth());
+	}
+
+	static double computeTextHeight(Font font, String text, double wrappingWidth) {
+		helper.setText(text);
+		helper.setFont(font);
+		helper.setWrappingWidth((int) wrappingWidth);
+		return helper.getLayoutBounds().getHeight();
+
 	}
 
 	private static Color getColor(int rgb) {

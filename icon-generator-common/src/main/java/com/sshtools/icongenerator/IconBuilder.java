@@ -46,7 +46,7 @@ public class IconBuilder {
 			if(text == null|| this != IconShape.AUTOMATIC)
 				return this == IconShape.AUTOMATIC ? IconShape.ROUND : this;
 			else
-				return IconShape.values()[Math.abs(text.hashCode() % IconShape.values().length - 1)];
+				return IconShape.values()[Math.abs(text.hashCode()) % (IconShape.values().length - 1)];
 		}
 	}
 
