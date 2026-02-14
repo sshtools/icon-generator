@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sshtools</groupId>
 	<artifactId>icon-generator</artifactId>
-	<version>1.4.4-SNAPSHOT</version>
+	<version>1.4.4</version>
 	<packaging>pom</packaging>
 	<name>A simple icon generator</name>
 	<description>This simple icon generator is intended to be an icon generation library for multiple toolkits. Currently a 3 implementations are available, one for Java2d (AWT/Swing), one for JavaFX and one for SWT, all available as a separate add-on modules.</description>
