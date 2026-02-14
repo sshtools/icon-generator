@@ -46,7 +46,7 @@ public class IconBuilder {
 			if(text == null|| this != IconShape.AUTOMATIC)
 				return this == IconShape.AUTOMATIC ? IconShape.ROUND : this;
 			else
-				return IconShape.values()[Math.abs(text.hashCode()) % (IconShape.values().length - 1)];
+				return IconShape.values()[Math.abs(text.hashCode() % IconShape.values().length - 1)];
 		}
 	}
 
@@ -171,10 +171,41 @@ public class IconBuilder {
 	private Colors theme;
 	private int backgroundOpacity= 255;
 
+	private static ClassLoader bestClassLoader() {
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null) {
+			cl = IconBuilder.class.getClassLoader();
+		}
+		return cl;
+	}
+
 	/**
 	 * Constructor.
 	 */
 	public IconBuilder() {
+		this(bestClassLoader());
+	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param classLoader class loader to look for icon generators with service
+	 */
+	public IconBuilder(ClassLoader classLoader) {
+		this(classLoader, null);
+	}
+	
+	/**
+	 * Constructor when you want to look for icon generators in a specific
+	 * module layer.
+	 * 
+	 * @param layer module layer to look for icon generators in
+	 */
+	public IconBuilder(ModuleLayer layer) {
+		this(null, layer);
+	}
+	
+	private IconBuilder(ClassLoader classLoader, ModuleLayer layer) {
 		color = AUTO_COLOR;
 		text = "";
 		textColor = AUTO_TEXT_COLOR;
@@ -188,9 +219,17 @@ public class IconBuilder {
 		textContent = TextContent.ORIGINAL;
 		theme = null;
 		/* Default generators */
-		for (IconGenerator<?> gen : ServiceLoader.load(IconGenerator.class)) {
-			if (gen.isValid())
-				generators.put(gen.getIconClass(), gen);
+		if(layer == null) {
+			for (IconGenerator<?> gen : ServiceLoader.load(IconGenerator.class, classLoader)) {
+				if (gen.isValid())
+					generators.put(gen.getIconClass(), gen);
+			}
+		}
+		else {
+			for (IconGenerator<?> gen : ServiceLoader.load(layer, IconGenerator.class)) {
+				if (gen.isValid())
+					generators.put(gen.getIconClass(), gen);
+			}
 		}
 	}
 

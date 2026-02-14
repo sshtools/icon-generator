@@ -11,7 +11,7 @@ This add-on is available in Maven Central :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-swing</artifactId>
-		<version>1.1.0</version>
+		<version>1.4.4</version>
 	</dependency>
 </dependencies>
 ```

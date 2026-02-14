@@ -40,8 +40,8 @@ public class JavaFXIcons extends Application {
 				if (r.nextFloat() > 0.5)
 					ib.border((int) (r.nextFloat() * 4f));
 				ib.shape(IconShape.values()[(int) (IconShape.values().length * r.nextFloat())]);
-				ib.width(128);
-				ib.height(128);
+				ib.width(48);
+				ib.height(48);
 				ib.backgroundOpacity(128);
 				if(r.nextFloat() > 0.5) {
 					ib.border((int)( 1 + ( r.nextFloat() * 3 ) ));
