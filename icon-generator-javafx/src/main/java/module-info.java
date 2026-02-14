@@ -4,5 +4,7 @@ module com.sshtools.icongenerator.javafx {
 	requires transitive javafx.graphics;
     exports com.sshtools.icongenerator.javafx;
     exports com.sshtools.icongenerator.tools;
-    provides com.sshtools.icongenerator.IconGenerator with com.sshtools.icongenerator.javafx.JavaFXCanvasGenerator;
+    provides com.sshtools.icongenerator.IconGenerator with 
+    	com.sshtools.icongenerator.javafx.JavaFXCanvasGenerator,
+    	com.sshtools.icongenerator.javafx.JavaFXImageGenerator;
 }

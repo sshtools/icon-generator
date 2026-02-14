@@ -18,7 +18,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-swing</artifactId>
-		<version>1.3.0</version>
+		<version>1.4.4</version>
 	</dependency>
 ```
 
@@ -28,7 +28,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-javafx</artifactId>
-		<version>1.3.0</version>
+		<version>1.4.4</version>
 	</dependency>
 ```
 
@@ -38,7 +38,7 @@ You may include multiple toolkits if you wish :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-swt</artifactId>
-		<version>1.3.0</version>
+		<version>1.4.4</version>
 	</dependency>
 ```
 
@@ -161,6 +161,7 @@ following are supported :-
 | javax.swing.Icon | icon-generator-swing | A Swing icon. |
 | org.eclipse.swt.graphics.Image | icon-generator-swt | An SWT image. |
 | javafx.scene.canvas.Canvas | icon-generator-javafx | A JavaFX canvas. |
+| javafx.scene.image.Image | icon-generator-javafx | A JavaFX image. |
 
 ### Generate an ImageIcon for use in Swing
 
@@ -180,6 +181,13 @@ try(OutputStream out = response.getOutputStream()) {
 }
 
 ```
+
+
+## Class Loaders
+
+You may hava different class loader requirements. `IconBuilder` has a couple of alternative constructors that take either a `ClassLoader` or a `ModulerLayer` to help locate the generator services.
+
+By default, the same classloader that loaded `IconBuilder` will be used, unless the current thread context classloader is set, in which case that will be used.
 
 ## Extending
 

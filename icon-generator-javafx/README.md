@@ -11,18 +11,28 @@ This add-on is available in Maven Central :-
 	<dependency>
 		<groupId>com.sshtools</groupId>
 		<artifactId>icon-generator-javafx</artifactId>
-		<version>1.1.0</version>
+		<version>1.4.4</version>
 	</dependency>
 </dependencies>
 ```
 # Generating an Icon
 
 See the [icon-generator](https://github.com/sshtools/icon-generator) for general information on building an icon.
+
 Then when you have an IconBuilder instance, use the following to generate
 a `javafx.scene.canvas.Canvas`. 
 
 ```java
 Canvas iconCanvas  = builder.build(Canvas.class);
+// Do something with iconCanvas 
+
+```
+
+Or use the following to generate
+a `javafx.scene.image.Image`. 
+
+```java
+Image iconImage  = builder.build(Image.class);
 // Do something with iconCanvas 
 
 ```
